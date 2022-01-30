@@ -16,6 +16,11 @@ class CreateSellersTable extends Migration
         Schema::create('sellers', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('address');
+            $table->date('date_of_birth');
+            $table->unsignedInteger('rating');
+            $table->unsignedInteger('sold');
+
         });
     }
 

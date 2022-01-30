@@ -16,6 +16,15 @@ class CreateSoldsTable extends Migration
         Schema::create('solds', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('buyer_id');
+            $table->unsignedInteger('seller_id');
+            $table->unsignedInteger('totalprice');
+            $table->unsignedInteger('num_of_related')->nullable();
+            $table->timestamp('bought_at')->nullable();
+            $table->boolean('discount')->default(0);
+            $table->unsignedInteger('discount_percentage');
+       
         });
     }
 
