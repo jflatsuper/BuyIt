@@ -22,7 +22,8 @@ class User {
         localStorage.setItem('userEmail', data.email)
         localStorage.setItem('userLoggedIn', true)
 
-        this.init()
+        this.init();
+        this.isLoggedIn();
 
         callback()
     }

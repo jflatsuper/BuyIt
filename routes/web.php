@@ -15,6 +15,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/dashboard');
 });
-Route::get('/{path?}', function () {
-    return view('app');
-});
+Route::view('/{path?}', 'app')->where('path', '([A-z\d\-\/_.]+)?');
