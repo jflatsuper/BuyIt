@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Auth;
 
 class ProductController extends Controller
 {
@@ -38,8 +39,15 @@ class ProductController extends Controller
     
 }
     public function show(){
-        $products=Product::all();
+        
+       
+      
+        $products8=Product::with(['cart' => function ($query) {
+            $query->where('buyer_id', Auth::user()->id);
+          }])->get();
+        //   $products= Product::with('cart')->where('buyer_id',Auth::user()->id)->first()->pivot->amount;
+       
 
-        return $products->toJson();
+        return $products8->toJson();
     }
 }

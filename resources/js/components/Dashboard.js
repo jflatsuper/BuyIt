@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet, Route,Routes } from 'react-router-dom';
 import user from "../Models/user";
 import Logout from './authComps/Logout';
@@ -9,31 +9,46 @@ import '../../css/active.css';
 
 
 function Dashboard(){
+    const [buyer,setBuyer]=useState({
+        date_of_birth:"1",
+    });
+    useEffect(()=>{
+        window.axios.get('/api/basicdetails').then((response)=>{
+            setBuyer({
+                ...buyer,
+                date_of_birth:response.data.date_of_birth});
+
+        });
+    },[]);
+    console.log(buyer);
     
+
     
     
     
     return(
         <>
         <div>
-            <Alert variant="warning"  className="col-lg-12 text-center mb-0" dismissible>
-                
-                    <h5 className="col-lg-12">
-                        <Row>
-                        <LinkContainer to="" >
-                                <Nav.Link>Add you Date of Birth and Address to qualify for special discounts.
-                                    Click here
-                                </Nav.Link>
-                            
-                            </LinkContainer>
-                        </Row>
-                    </h5>
-             </Alert>
-            <Navbar className="col-lg-12 " bg="dark" variant="light" expand="lg">
+        {buyer.date_of_birth?null:
+        <Alert variant="warning"  className="col-lg-12 text-center mb-0" dismissible>
+            
+                <h5 className="col-lg-12">
+                    <Row>
+                    <LinkContainer to="profile" >
+                            <Nav.Link>Add you Date of Birth and Address to qualify for special discounts.
+                                Click here
+                            </Nav.Link>
+                        
+                        </LinkContainer>
+                    </Row>
+                </h5>
+         </Alert>}
+            
+            <Navbar className="col-lg-12 bg-warning " variant="light" expand="lg">
                 <Container fluid>
                     
 
-                    
+                    {/* Nav bar set at the top */}
                     <Navbar.Brand className="offset-lg-1" href="#home">Welcome, {user.name}</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
@@ -49,7 +64,9 @@ function Dashboard(){
                             
                          
                             <NavDropdown title="Account" id="basic-nav-dropdown">
-                                <NavDropdown.Item >Profile</NavDropdown.Item>
+                                <LinkContainer to="profile">
+                                    <NavDropdown.Item >Profile</NavDropdown.Item>
+                                </LinkContainer>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item >Another action</NavDropdown.Item>
                                 <NavDropdown.Divider />

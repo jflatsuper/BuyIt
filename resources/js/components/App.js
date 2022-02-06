@@ -9,6 +9,7 @@ import Home from './Home';
 import Products from './Products';
 import AddProducts from'./AddProducts';
 import Register from './authComps/Register';
+import Profile from './Profile';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                     <Route path="cart" element={<Cart/>}/>
                     <Route path='' element={<Home/>}/>
                     <Route path='products' element={<Products/>}/>
+                    <Route path='profile' element={<Profile/>}/>
                     
 
                 </Route>

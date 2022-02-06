@@ -9,10 +9,9 @@ use App\Models\Cart;
 class Customer extends Model
 {
     use HasFactory;
-    protected $fillable=["id","address","date_of_birth"];
-    public function carts(){
-        return $this->hasMany(Cart::class,'buyer_id','id');
-    }
+    protected $fillable=["user_id","address","date_of_birth"];
+   
+    
     public function user(){
       return  $this->belongsTo(User::class,'id','user_id');
     }
