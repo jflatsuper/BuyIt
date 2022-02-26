@@ -11,9 +11,11 @@ function AddProducts(){
         price:0,
         gender:'',
         color:'',
-        file:''
+        file:'',
+        fileup:{}
 
     });
+    const [img,setimgFile]=useState()
     const [checked,setCheck]=useState(false);
     const onInputChange=(e)=>{
         const currvalue=e.target.value;
@@ -24,16 +26,40 @@ function AddProducts(){
         });
         console.log(product);
     };
+    const onFileUpload=(e)=>{
+        e.preventDefault()
+        setimgFile(e.target.files[0])
+        setProduct( {
+                ...product,
+                [e.target.name]:e.target.value
+            })
+        console.log(img)
+    }
     const handleCreate=(e)=>{
         e.preventDefault();
+        const data=new FormData()
+        data.append('file',img)
+        data.append('name',product.name)
+        data.append('type',product.type)
+        data.append('isAvailable',JSON.stringify(product.large))
+        data.append('large',JSON.stringify(product.large))
+        data.append('price',JSON.stringify(product.price))
+        data.append('medium',JSON.stringify(product.medium))
+        data.append('small',JSON.stringify(product.small))
+        data.append('gender',product.gender)
+        data.append('color',product.color)
+        data.append('file',product.file)
+       
+        console.log(data)
+       
     
-    window.axios.post("api/create",product).then((response)=>{
+    window.axios.post("/api/create",data).then((response)=>{
         console.log(response.data);
     })}
     return(
         <>
         <Container fluid>
-            <Form  onSubmit={handleCreate}>
+            <Form  onSubmit={handleCreate} >
                 <FormGroup>
                     <FormLabel>
                         Name:
@@ -135,9 +161,10 @@ function AddProducts(){
                     <FormLabel  >
                         Upload product image
                     </FormLabel>
-                    <FormControl value={product.file} type="file" name="file" onChange={onInputChange} autoFocus/>
+                    <FormControl type="file" value={product.file}  name="file" onChange={onFileUpload} accept="image/jpeg,image/jpg,image/bmp,image/raw,image/png" required autoFocus/>
                     
                 </FormGroup>
+                <hr/>
                 <Button type="submit">Submit</Button>
 
             </Form>

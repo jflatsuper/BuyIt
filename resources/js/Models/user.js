@@ -8,6 +8,7 @@ class User {
         this.name = localStorage.getItem('userName')
         this.email = localStorage.getItem('userEmail')
         this.loggedIn = localStorage.getItem('userLoggedIn')
+        this.role=localStorage.getItem('role')
     }
 
     /**
@@ -21,6 +22,7 @@ class User {
         localStorage.setItem('userName', data.name)
         localStorage.setItem('userEmail', data.email)
         localStorage.setItem('userLoggedIn', true)
+        localStorage.setItem('role',data.user_type)
 
         this.init();
         this.isLoggedIn();
@@ -41,6 +43,7 @@ class User {
         localStorage.removeItem('userName')
         localStorage.removeItem('userEmail')
         localStorage.removeItem('userLoggedIn')
+        localStorage.removeItem('role')
     }
 
     /**

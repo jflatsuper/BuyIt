@@ -1,15 +1,25 @@
-import React from 'react';
+import React,{useState} from 'react';
 import  {Card, Container, Nav, Navbar,Row,Carousel, Image,Button,Stack} from 'react-bootstrap';
 import CardHeader from 'react-bootstrap/esm/CardHeader';
- 
+import '../../css/app.css';
+import ImageOverlay from './ImageOverlayed'
+
 function Home(){
+    const [capshow,showcap]=useState("none")
+    const onPause=(e)=>{
+        e.preventDefault()
+        showcap("block")
+
+    }
     return(
         <>
         <div>
+           
+
             
-            <Container  fluid className=" col-lg-10 offset-lg-1 alert alert-success mt-5" style={{height:""}}  bg="dark">
+            <Container  fluid className=" col-lg-10 offset-lg-1  mt-5" style={{height:"" ,backgroundColor:"#b4b8b5"}}  bg="dark">
                 <Row className="mt-5 mb-5">
-                    <Container fluid className="col-lg-4 " >
+                    <Container fluid className="col-lg-4 mt-5" >
                         <Card>
                             <Card.Header className="text-center">
                                 Featured
@@ -17,42 +27,34 @@ function Home(){
                             </Card.Header>
                             <Card.Body>
                                 <Container>
-                                 <Carousel controls={false} interval={20} indicators={false} variant="dark">
+                                 <Carousel controls={false} interval={2000} indicators={false} variant="dark" on={onPause}>
                                     <Carousel.Item>
-                                        <img
-                                        className="d-block w-100"
+                                        <ImageOverlay
+                                        width="80%"
                                         src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
-                                        alt="First slide"
+                                        caption="Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+                                        alt="first"
                                         />
-                                        <Carousel.Caption variant="light">
-                                        <h3>First slide label</h3>
-                                        <Button>Buy</Button>
-                                        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                                        </Carousel.Caption>
+                                   
+                                       
                                     </Carousel.Item>
                                     <Carousel.Item>
-                                        <img
-                                        className="d-block w-100"
+                                    <ImageOverlay
                                         src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
-                                        alt="Second slide"
+                                        width="80%"
+                                        caption="Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+                                        alt="second"
                                         />
-
-                                        <Carousel.Caption>
-                                        <h3>Second slide label</h3>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                                        </Carousel.Caption>
+                                       
                                     </Carousel.Item>
                                     <Carousel.Item>
-                                        <img
-                                        className="d-block w-100"
+                                    <ImageOverlay
                                         src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
-                                        alt="Third slide"
+                                        caption="Lorem ipsum dolor sit amet, consectetur adipisicing elit."
+                                        width="80%"
+                                        alt="third"
                                         />
-
-                                        <Carousel.Caption>
-                                        <h3>Third slide label</h3>
-                                        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                                        </Carousel.Caption>
+                                       
                                     </Carousel.Item>
                                 </Carousel>
                                </Container>
@@ -61,7 +63,7 @@ function Home(){
 
                     </Container>
                     
-                    <Container fluid className="offset-lg-1 col-lg-7">
+                    <Container fluid className="offset-lg-1 col-lg-7 mt-5">
                         <Card>
                             <CardHeader>For You</CardHeader>
                             <Card.Body>

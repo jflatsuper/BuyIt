@@ -5,37 +5,53 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Auth;
-
+use Cloudinary;
+use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     //
     public function create(Request $request){
+     
+        //local file storage
+        $filename = time().rand(3,7). '.'.$request->file('file') ->getClientOriginalExtension();
+        // $request->file('file')->move('uploads/', $filename);
+         
+        // $path = Storage::putFileAs(
+        //     'products', $request->file('file'), $filename
+        // );
+        $path = $request->file->storeOnCloudinaryAs('products', $filename)->getSecurePath();
+
+        // $imglink=cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
+        
         $credentials=$request->validate([
             'name'=>["required"],
             'type'=>["required"],
-            'isAvailable'=>["required",'boolean'],
-            'large'=>["required",'boolean'],
-            'medium'=>["required",'boolean'],
-            'small'=>["required",'boolean'],
+            'isAvailable'=>["required",],
+            'large'=>["required"],
+            'medium'=>["required"],
+            'small'=>["required"],
             "gender"=>["required"],
             "color"=>["required"],
             "file"=>["required"],
+            "price"=>["required"]
 
             
         ]);
         $product=Product::create([
             'name' => $credentials['name'],
             'type' => $credentials['type'],
-            'is_available'=>$credentials['isAvailable'],
-            'large'=>$credentials['large'],
-            'medium'=>$credentials['medium'],
-            'small'=>$credentials['small'],
+            
+            'is_available'=>json_decode($credentials['isAvailable']),
+            'large'=>json_decode($credentials['large']),
+            'medium'=>json_decode($credentials['medium']),
+            'seller_id'=>Auth::user()->id,
+            'small'=>json_decode($credentials['small']),
             'gender'=>$credentials['gender'],
             "color"=>$credentials['color'],
-            "price"=>$request->price,
-            "productimage"=>$credentials['file'],
+            "price"=>json_decode($request->price),
+            "productimage"=>$path,
         ]);
-        return response()->json("Product Updates");
+        return response()->json($path);
     
 }
     public function show(){
@@ -49,5 +65,26 @@ class ProductController extends Controller
        
 
         return $products8->toJson();
+    }
+    public function singleProduct(Request $request){
+        //brings out single product
+        $id=$request->Pid;
+        $product=Product::where('id',$id)->with(['cart' => function ($query) {
+            $query->where('buyer_id', Auth::user()->id)->first();
+          }])->first();
+        return $product->toJson();
+
+    }
+
+    public function find(Request $request){
+        $search=$request->var;
+        $products=Product::where('name','LIKE','%'.$search.'%')
+        ->OrWhere('type','LIKE','%'.$search.'%')->get();
+        
+        return $products->toJson();
+    }
+    public function sellerprod(Request $request){
+        $products=Product::where('seller_id','LIKE','%'.Auth::user()->id.'%')->with(['cart'])->get();
+        return $products->toJson();
     }
 }

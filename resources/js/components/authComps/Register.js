@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Container, FormGroup,Form, FormLabel,FormControl, FormCheck, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import user from '../../Models/user';
-function Register(){
-    const navigate=useNavigate();
+function Register({handleRegister,callback,role}){
+   
     const[values,setValues]=useState({
         name:'',
         email:'',
         password:'',
         confirm_password:'',
+        role:role
 
 
     });
@@ -29,42 +30,12 @@ function Register(){
 
 
     }
-    const authenticatedCallback = () => {
-        navigate('/dashboard',{replace:true})
-    }
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-        window.axios.post("/api/checkEmail",values).then((response)=>{
-            if(response.data){
-                setError({
-                    ...errors,
-                    emailError:"Email already linked with existing user"
-                });
-            }else{
-                if(values.password!==values.confirm_password){
-                    setError({
-                        ...errors,
-                        confError:"Password does not match"
-                    });
-
-
-                }
-                else{
-                    window.axios.post("/api/createUser",values).then(response=>{
-                        user.authenticated(response.data,authenticatedCallback);
-
-                    })
-                }
-
-            }
-        });
-    }
-    
+  
     
     return (
         <>
         <Container>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={(e)=>handleRegister(e,callback,values)}>
                 <FormGroup>
                     <FormLabel>Name:</FormLabel>
                     <FormControl name="name" value={values.name} onChange={onInputChange} autoFocus isInvalid={errors.nameError?true:false}/>

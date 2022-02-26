@@ -3,15 +3,22 @@ import { Navigate, Outlet, Route,Routes } from 'react-router-dom';
 import user from "../Models/user";
 import Logout from './authComps/Logout';
 import Cart from './Cart';
-import {Nav,Navbar,Container,NavDropdown,Row,Alert} from 'react-bootstrap';
+import {Nav,Navbar,Container,NavDropdown,Row,Alert,InputGroup,FormControl,Button,ButtonGroup, NavItem,Dropdown} from 'react-bootstrap';
 import { Link, LinkContainer } from 'react-router-bootstrap';
 import '../../css/active.css';
+import '../../css/app.css';
+import img from '../../../public/img/main.png'
+import {Select} from 'react-select'
+
 
 
 function Dashboard(){
     const [buyer,setBuyer]=useState({
         date_of_birth:"1",
     });
+    const[search, setSearch]=useState("")
+    const[dropdown,setDrop]=useState(false)
+    const [searchitems,setItems]=useState([])
     useEffect(()=>{
         window.axios.get('/api/basicdetails').then((response)=>{
             setBuyer({
@@ -21,6 +28,24 @@ function Dashboard(){
         });
     },[]);
     console.log(buyer);
+ 
+
+    const toggleDropdown = () => setDrop(true)
+
+    const onInputChange=(e)=>{
+        setSearch(e.target.value)
+        toggleDropdown()
+        console.log(dropdown)
+        window.axios.post("/api/searchproducts",{
+            var:search
+        }).then((response)=>{
+            console.log(search)
+            console.log(response.data)
+            setItems(response.data)
+           
+        })
+
+    }
     
 
     
@@ -44,15 +69,23 @@ function Dashboard(){
                 </h5>
          </Alert>}
             
-            <Navbar className="col-lg-12 bg-warning " variant="light" expand="lg">
+            <Navbar className="col-sm-12 " variant="light" expand="sm" style={{backgroundColor:"#cfb732",borderBottom:"1px solid black"}}>
                 <Container fluid>
                     
 
                     {/* Nav bar set at the top */}
-                    <Navbar.Brand className="offset-lg-1" href="#home">Welcome, {user.name}</Navbar.Brand>
+                    <Navbar.Brand className="offset-sm-1 col-sm-1" href="#home">
+                        <img
+                            src={img}
+                            width="70%"
+                           
+                            
+                            alt="logo"
+                        />
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav defaultActiveKey='' fill className="me-auto col-lg-11 text-danger nav active">
+                        <Nav defaultActiveKey='' fill className="me-auto col-sm-11 text-danger nav active" style={{}}>
                             <LinkContainer activeClassName="active1" to=''>
                                 <Nav.Link  >Home</Nav.Link>
                             </LinkContainer>
@@ -60,6 +93,7 @@ function Dashboard(){
                             <LinkContainer activeClassName="active2" to='products'>
                                 <Nav.Link >Products</Nav.Link>
                             </LinkContainer>
+                           
                             
                             
                          
@@ -68,23 +102,63 @@ function Dashboard(){
                                     <NavDropdown.Item >Profile</NavDropdown.Item>
                                 </LinkContainer>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item >Another action</NavDropdown.Item>
+                                    <NavDropdown.Item >Another action</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <LinkContainer to="cart">
-                                <NavDropdown.Item >View Cart</NavDropdown.Item>
+                                    <NavDropdown.Item >View Cart</NavDropdown.Item>
                                 </LinkContainer>
                                 
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
-                            <Nav.Item className="offset-lg-5"><Logout/></Nav.Item>
+                            <NavItem className="col-sm-6">
+                                <InputGroup >
+                                    <FormControl
+                                    placeholder="Find...."
+                                    aria-label="Search"
+                                    aria-describedby="basic-addon2"
+                                    name="var"
+                                    id="dropdown-autoclose-outside"
+                                    autoComplete="false"
+                                    
+                                    onChange={onInputChange}
+                                    />
+                                    <Dropdown className="d-inline col-lg-12  mx-2" autoClose={true}  >
+                             
+
+    <Dropdown.Menu   show={dropdown} >
+        { searchitems.length<1? "":searchitems.map((searchItem,index)=>(
+            <Dropdown.Item key={index} href="#">{searchItem.name}</Dropdown.Item>
+            
+
+        ))
+        }
+      
+    </Dropdown.Menu>
+  </Dropdown>
+                                    <Button style={{backgroundColor:"#189e37"}} type="submit" id="button-addon2"> 
+                                    Search
+                                    </Button>
+                                </InputGroup>
+                                
+    
+
+                            </NavItem>
+                            
+                            <Nav.Item className="offset-sm-1"><Logout/></Nav.Item>
                         
                         </Nav>
                     </Navbar.Collapse>
                    
                 </Container>
             </Navbar>
-            <Outlet/>
+            
+            <Container>
+             <Outlet />
+            </Container>    
+           
+            
+            
             
    </div>
    </>

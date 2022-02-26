@@ -1,21 +1,19 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import Dashboard from './Dashboard';
-const CustomWrapper2 = ({ isLoggedIn, ...props }) => {
+const CustomWrapper = ({ isLoggedIn,role,view }) => {
     const location = useLocation();
-    return isLoggedIn? (
-      <Navigate
-        to={'/dashboard'}
+   
+     return isLoggedIn &&role==='2' ? 
+      (
+       view
+      )
+      
+     :
+     <Navigate
+        to={'/seller/login'}
         replace
         state={{ location }}
       />
     
-    ) : (
-      <Navigate
-        to={'/login'}
-        replace
-        state={{ location }}
-      />
-    )
   };
-  export default CustomWrapper2;
+  export default CustomWrapper;

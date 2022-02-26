@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate ,Route, useNavigate} from 'react-router-dom';
 import user from '../../Models/user';
+import {BsBoxArrowInRight} from 'react-icons/bs'
 
 function Logout({history}){
     const navigate=useNavigate();
@@ -25,10 +26,10 @@ function Logout({history}){
   
 
 return(
-    <form onSubmit={onLogout}>  
-            <button type="submit" >Logout</button>
+    
+            <a style={{color:"black"}} onClick={onLogout}  ><BsBoxArrowInRight size="2.5em "/></a>
 
-            </form>
+            
 )
 
 }

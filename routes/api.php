@@ -7,6 +7,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\BuyerController;
+use App\Http\Controllers\SoldController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,10 +26,16 @@ Route::post('createUser',[RegisterController::class,'create']);
 Route::post('login',[LoginController::class,'login']);
 Route::post('create',[ProductController::class,'create']);
 Route::get('products',[ProductController::class,'show']);
-
+// Laravel 5.1.17 and above
+Route::post('/pay', [PaymentController::class, 'redirectToGateway']);
+// Laravel 8
+Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallback']);
 Route::get('cart',[CartController::class,'show']);
 Route::put('addCart',[CartController::class,'updateCart']);
 Route::put('remCart',[CartController::class,'removeFromCart']);
+Route::post('searchproducts',[ProductController::class,'find']);
+Route::post('showProduct',[ProductController::class,'singleProduct']);
+Route::post('checkout',[SoldController::class,'checkout']);
 
 
 Route::middleware(['Models:sanctum'])->group (function (){
@@ -39,4 +47,6 @@ Route::middleware(['Models:sanctum'])->group (function (){
     Route::get('/basicdetails',[BuyerController::class,'showBuyerDetails']);
     Route::put('/changeAddress',[BuyerController::class,'updateAddress']);
     Route::put('/changeDOB',[BuyerController::class,'changeDateofBirth']);
+    Route::get('/sellerproducts',[ProductController::class,'sellerprod']);
+  
 });

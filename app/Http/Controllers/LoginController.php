@@ -11,13 +11,15 @@ class LoginController extends Controller
     public function login(Request $request):JsonResponse{
         $credentials=$request->validate([
             'email'=>['required','email'],
-            'password'=>['required']
+            'password'=>['required'],
+            
         ]);
         //validates the values passed into the controller
         if (Auth::attempt($credentials)){
             $request->session()->regenerate();
-            $user = Auth::user();
-            return response()->json($user);
+            $users = Auth::user();
+            
+            return response()->json($users);
             // authenticates the user if values are found 
         }
         return response()->json([
@@ -25,11 +27,8 @@ class LoginController extends Controller
                 'email'=>'The provided credentials do not match our record.'
             ]],422);
             //returns errors in json format if auth attempt fails
-
-        
-
-
     }
+  
     public function logouts(Request $request): JsonResponse
     {
 

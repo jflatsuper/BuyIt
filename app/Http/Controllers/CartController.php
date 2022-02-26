@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use DB;
 use App\Models\Cart;
+use App\Models\Product;
 
 class CartController extends Controller
 {
@@ -32,11 +33,13 @@ class CartController extends Controller
             //adds the product to the pivot table by referencing carts and the product id
             $added=$addtoCart->products()->syncWithoutDetaching($productid);
             //increments the amount of products in the authenticated users cart  i.e one click increases the amount by one as well as set price
-            $addtoCart->products()->updateExistingPivot($productid,['amount' => DB::raw('amount+1'), 'price' => 49.99]);
-            
+            $addtoCart->products()->updateExistingPivot($productid,['amount' => DB::raw('amount+1'), 'price' =>$request->price]);
+            $product=Product::where('id',$productid)->with(['cart' => function ($query) {
+                $query->where('buyer_id', Auth::user()->id)->first();
+              }])->first();
            
-                if($added){
-                    return response()->json($added);
+                if($addtoCart){
+                    return ($product)->toJson();
 
                 }
             
@@ -46,18 +49,40 @@ class CartController extends Controller
     public function removeFromCart(Request $request){
         $productid=$request->productId;
         $user=Auth::user();
-        if(!$user->cart()){
-            return response()->json("You are yet to cart any item");
+       
+        if($user->cart===null)
+        {
+            return null;
         }
+        $user->cart->products()->newPivotStatement()->where('product_id', '=', $productid)  
+        ->where('amount', '<=', 1)->delete();
         $cartid=$user->cart->id;
-        
+        //Removes product from cart if the product is greater than 0
         $user->cart->products()->newPivotStatement()->where('product_id', '=', $productid)  
         ->where('amount', '>', 0)->update(array(
        'amount' =>DB::raw('amount-1')
    ));
+      
+   $product=Product::where('id',$productid)->with(['cart' => function ($query) {
+    $query->where('buyer_id', Auth::user()->id)->first();
+  }])->first();
           
 
-        return response()->json("removed");
+  return ($product)->toJson();
+
+    }
+    public function show(){
+        $user=Auth::user();
+        if($user->cart){
+            $carts=$user->cart->products;
+            return $carts->toJson();
+
+        }
+        else{
+            return response()->json();
+        
+        }
+        
 
     }
 }
