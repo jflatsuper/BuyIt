@@ -16,7 +16,7 @@ function AddProducts(){
 
     });
     const [img,setimgFile]=useState()
-    const [checked,setCheck]=useState(false);
+   
     const onInputChange=(e)=>{
         const currvalue=e.target.value;
         setProduct({

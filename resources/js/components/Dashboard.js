@@ -8,7 +8,7 @@ import { Link, LinkContainer } from 'react-router-bootstrap';
 import '../../css/active.css';
 import '../../css/app.css';
 import img from '../../../public/img/main.png'
-import {Select} from 'react-select'
+
 
 
 
@@ -69,7 +69,7 @@ function Dashboard(){
                 </h5>
          </Alert>}
             
-            <Navbar className="col-sm-12 " variant="light" expand="sm" style={{backgroundColor:"#cfb732",borderBottom:"1px solid black"}}>
+            <Navbar className="col-sm-12 " variant="light" expand="sm" style={{backgroundColor:"#00g00b",borderBottom:"1px solid black"}}>
                 <Container fluid>
                     
 
@@ -153,7 +153,7 @@ function Dashboard(){
                 </Container>
             </Navbar>
             
-            <Container>
+            <Container style={{backgroundColor:'thistle'}}>
              <Outlet />
             </Container>    
            

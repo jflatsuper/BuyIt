@@ -1,14 +1,16 @@
-
 import React from 'react';
 import { FormGroup ,Container,Form,Button} from 'react-bootstrap';
+import user from '../Models/user'
 import {PaystackButton } from 'react-paystack';
-const config = {
+
+function Checkout({total,carted}){
+  const config = {
     reference: Date.now(),
-    email: "joshsupersport@gmail.com",
-    amount: 20000,
-    publicKey:'pk_test_53410c75d2f820247612c152cf06b5191a71d486',
+    email: user.email,
+    amount: total*100,
+    
+    publicKey:process.env.MIX_PAYSTACK_PUBLIC_KEY,
 };
-function Checkout(){
     const handlePaystackSuccessAction = (reference) => {
         // Implementation for whatever you want to do with reference and after success call.
         console.log(reference);
@@ -23,6 +25,7 @@ function Checkout(){
     const componentProps = {
           ...config,
           text: 'SUBMIT',
+          
           onSuccess: (reference) => handlePaystackSuccessAction(reference),
           onClose: handlePaystackCloseAction,
       };
@@ -38,6 +41,7 @@ function Checkout(){
     return(
         
         <Container>
+          
            <PaystackButton {...componentProps} />
         </Container>
     )

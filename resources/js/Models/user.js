@@ -1,8 +1,10 @@
+
 class User {
 
     constructor() {
         this.init()
     }
+    
 
     init() {
         this.name = localStorage.getItem('userName')
@@ -19,6 +21,8 @@ class User {
      * @param callback function
      */
     authenticated(data, callback) {
+        const secret = 'abcdefg';
+       
         localStorage.setItem('userName', data.name)
         localStorage.setItem('userEmail', data.email)
         localStorage.setItem('userLoggedIn', true)
@@ -26,7 +30,9 @@ class User {
 
         this.init();
         this.isLoggedIn();
-
+       
+        
+        
         callback()
     }
 

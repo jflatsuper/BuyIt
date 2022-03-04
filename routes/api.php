@@ -34,7 +34,7 @@ Route::get('cart',[CartController::class,'show']);
 Route::put('addCart',[CartController::class,'updateCart']);
 Route::put('remCart',[CartController::class,'removeFromCart']);
 Route::post('searchproducts',[ProductController::class,'find']);
-Route::post('showProduct',[ProductController::class,'singleProduct']);
+
 Route::post('checkout',[SoldController::class,'checkout']);
 
 

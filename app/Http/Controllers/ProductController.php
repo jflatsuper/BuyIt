@@ -19,7 +19,9 @@ class ProductController extends Controller
         // $path = Storage::putFileAs(
         //     'products', $request->file('file'), $filename
         // );
-        $path = $request->file->storeOnCloudinaryAs('products', $filename)->getSecurePath();
+        $img = $request->file->storeOnCloudinaryAs('products', $filename);
+        $path=$img->getSecurePath();
+        $public_id=$img->getPublicId();
 
         // $imglink=cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
         
@@ -50,6 +52,7 @@ class ProductController extends Controller
             "color"=>$credentials['color'],
             "price"=>json_decode($request->price),
             "productimage"=>$path,
+            "productpublicid"=>$public_id,
         ]);
         return response()->json($path);
     
@@ -58,22 +61,13 @@ class ProductController extends Controller
         
        
       
-        $products8=Product::with(['cart' => function ($query) {
+        $products8=Product::where('is_available',true)->with(['cart' => function ($query) {
             $query->where('buyer_id', Auth::user()->id);
           }])->get();
         //   $products= Product::with('cart')->where('buyer_id',Auth::user()->id)->first()->pivot->amount;
        
 
         return $products8->toJson();
-    }
-    public function singleProduct(Request $request){
-        //brings out single product
-        $id=$request->Pid;
-        $product=Product::where('id',$id)->with(['cart' => function ($query) {
-            $query->where('buyer_id', Auth::user()->id)->first();
-          }])->first();
-        return $product->toJson();
-
     }
 
     public function find(Request $request){

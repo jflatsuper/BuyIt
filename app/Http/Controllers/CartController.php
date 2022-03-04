@@ -39,7 +39,7 @@ class CartController extends Controller
               }])->first();
            
                 if($addtoCart){
-                    return ($product)->toJson();
+                    return response()->json(true);
 
                 }
             

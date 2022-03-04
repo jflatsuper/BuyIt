@@ -5,18 +5,10 @@ import { Container } from 'react-bootstrap';
 import { useParams } from 'react-router';
 
 
-function ProductView(){
-    const [product,setproduct]=useState({})
-    const {id}=useParams()
-    useEffect(()=>{
-        window.axios.post("/api/showProduct",{ Pid:id }
-        ).then((response)=>{
-            console.log(response.data)
-            setproduct(response.data)
-        })
-
-
-    },[])
+function ProductView({product}){
+    
+    
+  
     
 
 

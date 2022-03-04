@@ -8,77 +8,22 @@ import Sidebar from './SideBar';
 import {LinkContainer} from 'react-router-bootstrap'
 import ImageOverlay from './ImageOverlayed';
 
-function Products(){
-    const[products,setProducts]=useState([
-        
-    ]);
-    const[loading,setLoading]=useState(true)
+function Products({products,handleSpecificProduct,cartUpdate,cartRem,loading}){
+    
+    
+    // <LoadingOverlay
+    //     active={loading}
+    //     spinner={<LoadingLogo/>}>
+    // </LoadingOverlay>
     
 
-    const cartUpdate=(e,id,price)=>{
-        e.persist();
-        setLoading(true)
-        //Add an item to user cart( for authenticated users)
-        window.axios.put("/api/addCart",{
-            productId:id,
-            price:price
-
-        }).then((response)=>{
-            console.log(response.data)
-            let updatedproduct=products.map(product=>{
-                return product.id===id?response.data      
-                :product;   
-             })
-             console.log(updatedproduct)
-
-           setProducts(updatedproduct)
-           setLoading(false)
-
-        })
-
-    }
-    const cartRem=(e,id)=>{
-        e.persist();
-        setLoading(true)
-        //Remove an item from user cart( for authenticated users)
-        window.axios.put("/api/remCart",{
-            productId:id
-        }).then((response)=>{
-            console.log(response.data)
-            if(response.data){
-            let updatedproduct=products.map(product=>{
-                return product.id===id?response.data      
-                :product;   
-                
-             })
-             setProducts(updatedproduct)
-             }
-
-             
-
-           
-           setLoading(false)
-
-        })
-
-    }
     
-    useEffect(()=>{
-        window.axios.get("/api/products").then(response=>{
-            setProducts(response.data);
-            setLoading(false)
-            console.log(response.data);
-        })
-
-    },[]);
-   
     return(
         <>
-        <LoadingOverlay
-        active={loading}
-        spinner={<LoadingLogo/>}
+          <LoadingOverlay
+            active={loading}
+            spinner={<LoadingLogo/>}>
         
-        >
             <Container fluid className="col-sm-12 "  expand="expand" >
                 <Row  className="col-sm-12" style={{height:"100vh"}} >
                     {/* <Col className=" h-100 col-sm-2"  >
@@ -86,26 +31,26 @@ function Products(){
                         
                     </Col> */}
                     <Col fill className="  col-sm-12" style={{height:"auto"}} >
-                        <Row>
+                        <Row xs={1} md={3} lg={3} className='grid-4'>
                             {//shows products for th authenticated user
                             products.map((product,index)=>(
                                 
-                                    <Container className="col-sm-3 text-center mt-5 " key={index}>
+                                    <Col className=" text-center mt-5 " key={index}>
                                         <Card className="col-sm-12" >
                                         
                                         <CardHeader style={{backgroundColor:"#cfb732"}}><strong>{product.name}</strong></CardHeader>
-                                        <LinkContainer to={`${product.id}`} >
-                                            <Card.Body className="col-sm-12 m-0 p-0" style={{backgroundColor:'black'}} >
+                                        
+                                            <Card.Body className="col-sm-12 m-0 p-0" style={{backgroundColor:'black'}} onClick={(e)=>handleSpecificProduct(e,product.id)}>
                                                 <ImageOverlay
                                                 
                                                     width="300px"
                                                     height="200px"
-                                                    src={product.productimage}
+                                                    src={'product.productimage'}
                                                     caption={product.price}
                                                     alt='   This is it'
                                                 />
                                             </Card.Body>
-                                        </LinkContainer>
+                                        
                                         
                                         <Card.Footer className="col-sm-12 p-0">
                                         <div className="d-grid  gap-2 ml-0">
@@ -135,7 +80,7 @@ function Products(){
                                             </Card.Footer>
 
                                     </Card>    
-                                    </Container>
+                                    </Col>
                             ))}
                         </Row>
                     </Col>
@@ -144,9 +89,10 @@ function Products(){
                 </Row>
             
             </Container>
+        </LoadingOverlay>
 
        
-       </LoadingOverlay>
+    
         
         </>
     )

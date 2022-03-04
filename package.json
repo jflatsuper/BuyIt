@@ -30,6 +30,8 @@
     "@babel/preset-env": "^7.16.11",
     "babel-cli": "^6.26.0",
     "babel-preset-react-app": "^3.1.2",
+    "dotenv": "^16.0.0",
+    "fs": "^0.0.1-security",
     "react-bootstrap": "^2.1.2",
     "react-burger-menu": "^3.0.6",
     "react-icons": "^4.3.1",
@@ -48,6 +50,7 @@
   "directories": {
     "test": "tests"
   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jflatsuper/BuyIt.git"
@@ -58,5 +61,10 @@
   "bugs": {
     "url": "https://github.com/jflatsuper/BuyIt/issues"
   },
-  "homepage": "https://github.com/jflatsuper/BuyIt#readme"
+  "homepage": "https://github.com/jflatsuper/BuyIt#readme",
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  }
 }

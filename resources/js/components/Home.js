@@ -17,8 +17,8 @@ function Home(){
            
 
             
-            <Container  fluid className=" col-lg-10 offset-lg-1  mt-5" style={{height:"" ,backgroundColor:"#b4b8b5"}}  bg="dark">
-                <Row className="mt-5 mb-5">
+            <Container  fluid className=" col-lg-10 offset-lg-1 " style={{height:"" ,backgroundColor:"#b4b8b5"}}  bg="dark">
+                {/* <Row className="mt-5 mb-5">
                     <Container fluid className="col-lg-4 mt-5" >
                         <Card>
                             <Card.Header className="text-center">
@@ -164,9 +164,9 @@ function Home(){
                             </Card.Body>
                         </Card>
 
-                    </Container>
+                    </Container> */}
                     
-                </Row>
+                {/* </Container></Row> */}
                 {/* <Stack direction="horizontal" gap={3}>
   <div className="bg-light border">First item</div>
   <div className="bg-light border ms-auto">Second item</div>

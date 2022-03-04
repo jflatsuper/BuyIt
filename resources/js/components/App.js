@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Routes,Navigate, useNavigate } from 'react-router-dom';
 import CustomWrapper from './customwrapper';
@@ -18,8 +18,21 @@ import CustomerRegister from './authComps/CustomerRegister'
 import CustomerLogin from './authComps/CustomerLogin'
 import SellerProducts from './SellerProducts';
 
+
+
 function App() {
     const navigate=useNavigate();
+    const[products,setProducts]=useState([])
+    const[product,setProduct]=useState({})
+    const[loading,setLoading]=useState(true)
+    useEffect(()=>{
+        window.axios.get("/api/products").then(async(response)=>{
+            await setProducts(response.data);
+            setLoading(false)
+            console.log(response.data);
+        })
+
+    },[]);
     
     const authenticatedCallback = () => {
         navigate('/dashboard',{replace:true})
@@ -69,6 +82,81 @@ function App() {
             }
         });
     }
+    const cartUpdate=(e,id,price)=>{
+        e.persist();
+        setLoading(true)
+        //Add an item to user cart( for authenticated users)
+        window.axios.put("/api/addCart",{
+            productId:id,
+            price:price
+
+        }).then((response)=>{
+            console.log(response.data)
+            console.log(products[0])
+            let updatedproduct=products.map(product=>{
+                return product.id===id?{
+                    ...product,
+                    cart:product.cart.map((carted,index)=>{
+                        return index===0?{
+                            ...carted,
+                            pivot:{
+                                ...carted.pivot,
+                                amount:carted.pivot.amount+1
+                            }
+                            
+
+
+                            
+                           
+                        }:
+                        carted
+                    })
+
+
+                }     
+                :product;   
+             })
+             console.log(updatedproduct)
+
+            setProducts(updatedproduct)
+            setLoading(false)
+
+        })
+
+    }
+    const cartRem=(e,id)=>{
+        e.persist();
+        setLoading(true)
+        //Remove an item from user cart( for authenticated users)
+        window.axios.put("/api/remCart",{
+            productId:id
+        }).then((response)=>{
+            console.log(response.data)
+            if(response.data){
+            let updatedproduct=products.map(product=>{
+                return product.id===id?response.data      
+                :product;   
+                
+             })
+             setProducts(updatedproduct)
+             }
+
+             
+
+           
+           setLoading(false)
+
+        })
+
+    }
+    const handleSpecificProduct=(e,id)=>{
+        const product=products.find(product=>product.id===id)
+        setProduct(product)
+        navigate(`/dashboard/products/${id}`,{replace:false})
+    }
+    
+  
+   
  
     
    
@@ -117,8 +205,21 @@ function App() {
                 }>
                     <Route path="cart" element={<Cart/>}/>
                     <Route path='' element={<Home/>}/>
-                    <Route path='products' element={<Products/>}/>
-                    <Route path="products/:id" element={<ProductView/>}/>
+                    <Route path='products' element={
+                        <Products
+                        products={products}
+                        handleSpecificProduct={handleSpecificProduct}
+                        cartRem={cartRem}
+                        loading={loading}
+                        cartUpdate={cartUpdate}
+                        />
+                    }/>
+                    <Route path="products/:id" element={
+                        <ProductView
+                        
+                            product={product}
+                        />
+                        }/>
                         
               
                    

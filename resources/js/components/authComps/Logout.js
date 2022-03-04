@@ -27,7 +27,7 @@ function Logout({history}){
 
 return(
     
-            <a style={{color:"black"}} onClick={onLogout}  ><BsBoxArrowInRight size="2.5em "/></a>
+            <a style={{color:"black"}} onClick={onLogout}  >{user.name}<BsBoxArrowInRight size="2.5em "/></a>
 
             
 )
