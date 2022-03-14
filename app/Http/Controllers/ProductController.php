@@ -11,20 +11,6 @@ class ProductController extends Controller
 {
     //
     public function create(Request $request){
-     
-        //local file storage
-        $filename = time().rand(3,7). '.'.$request->file('file') ->getClientOriginalExtension();
-        // $request->file('file')->move('uploads/', $filename);
-         
-        // $path = Storage::putFileAs(
-        //     'products', $request->file('file'), $filename
-        // );
-        $img = $request->file->storeOnCloudinaryAs('products', $filename);
-        $path=$img->getSecurePath();
-        $public_id=$img->getPublicId();
-
-        // $imglink=cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
-        
         $credentials=$request->validate([
             'name'=>["required"],
             'type'=>["required"],
@@ -39,6 +25,22 @@ class ProductController extends Controller
 
             
         ]);
+     
+        //local file storage
+        $filename = time().rand(3,7). '.'.$request->file('file') ->getClientOriginalExtension();
+        // $request->file('file')->move('uploads/', $filename);
+         
+        // $path = Storage::putFileAs(
+        //     'products', $request->file('file'), $filename
+        // );
+        $img = $request->file->storeOnCloudinaryAs('products', $filename);
+        $path=$img->getSecurePath();
+        $public_id=$img->getPublicId();
+        echo($public_id);
+
+        // $imglink=cloudinary()->upload($request->file('file')->getRealPath())->getSecurePath();
+        
+       
         $product=Product::create([
             'name' => $credentials['name'],
             'type' => $credentials['type'],

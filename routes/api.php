@@ -36,6 +36,7 @@ Route::put('remCart',[CartController::class,'removeFromCart']);
 Route::post('searchproducts',[ProductController::class,'find']);
 
 Route::post('checkout',[SoldController::class,'checkout']);
+Route::get('orders',[SoldController::class,'show']);
 
 
 Route::middleware(['Models:sanctum'])->group (function (){
@@ -48,5 +49,6 @@ Route::middleware(['Models:sanctum'])->group (function (){
     Route::put('/changeAddress',[BuyerController::class,'updateAddress']);
     Route::put('/changeDOB',[BuyerController::class,'changeDateofBirth']);
     Route::get('/sellerproducts',[ProductController::class,'sellerprod']);
+    
   
 });

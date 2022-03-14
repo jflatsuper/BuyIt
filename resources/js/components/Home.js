@@ -3,6 +3,7 @@ import  {Card, Container, Nav, Navbar,Row,Carousel, Image,Button,Stack} from 're
 import CardHeader from 'react-bootstrap/esm/CardHeader';
 import '../../css/app.css';
 import ImageOverlay from './ImageOverlayed'
+import img from '../../../public/img/null.jpeg'
 
 function Home(){
     const [capshow,showcap]=useState("none")
@@ -13,25 +14,21 @@ function Home(){
     }
     return(
         <>
-        <div>
+       
            
-
-            
             <Container  fluid className=" col-lg-10 offset-lg-1 " style={{height:"" ,backgroundColor:"#b4b8b5"}}  bg="dark">
-                {/* <Row className="mt-5 mb-5">
-                    <Container fluid className="col-lg-4 mt-5" >
+                <Row className="mb-5">
+                    <Container fluid className="col-lg-4 mt-5 " >
+                        <h1>Featured</h1>
                         <Card>
-                            <Card.Header className="text-center">
-                                Featured
-
-                            </Card.Header>
-                            <Card.Body>
-                                <Container>
+                            
+                            <Card.Body className='px-0 py-0'>
+                                <Container fluid className='px-0'>
                                  <Carousel controls={false} interval={2000} indicators={false} variant="dark" on={onPause}>
                                     <Carousel.Item>
                                         <ImageOverlay
-                                        width="80%"
-                                        src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
+                                        width="100%"
+                                        src={img}
                                         caption="Lorem ipsum dolor sit amet, consectetur adipisicing elit."
                                         alt="first"
                                         />
@@ -40,7 +37,7 @@ function Home(){
                                     </Carousel.Item>
                                     <Carousel.Item>
                                     <ImageOverlay
-                                        src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
+                                        src={img}
                                         width="80%"
                                         caption="Lorem ipsum dolor sit amet, consectetur adipisicing elit."
                                         alt="second"
@@ -49,7 +46,7 @@ function Home(){
                                     </Carousel.Item>
                                     <Carousel.Item>
                                     <ImageOverlay
-                                        src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
+                                        src={img}
                                         caption="Lorem ipsum dolor sit amet, consectetur adipisicing elit."
                                         width="80%"
                                         alt="third"
@@ -72,7 +69,7 @@ function Home(){
                                         <Carousel.Item>
                                             <img
                                             className="d-block w-100"
-                                            src="holder.js/800x400?text=First slide&bg=373940"
+                                            src={img}
                                             alt="First slide"
                                             />
                                             <Carousel.Caption>
@@ -83,7 +80,7 @@ function Home(){
                                         <Carousel.Item>
                                             <img
                                             className="d-block w-100"
-                                            src="holder.js/800x400?text=Second slide&bg=282c34"
+                                            src={img}
                                             alt="Second slide"
                                             />
 
@@ -95,7 +92,7 @@ function Home(){
                                         <Carousel.Item>
                                             <img
                                             className="d-block w-100"
-                                            src="holder.js/800x400?text=Third slide&bg=20232a"
+                                            src={img}
                                             alt="Third slide"
                                             />
 
@@ -125,7 +122,7 @@ function Home(){
                                         <Carousel.Item>
                                             <img
                                             className="d-block w-100"
-                                            src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
+                                            src={img}
                                             alt="First slide"
                                             />
                                             <Carousel.Caption variant="light">
@@ -137,7 +134,7 @@ function Home(){
                                         <Carousel.Item>
                                             <img
                                             className="d-block w-100"
-                                            src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
+                                            src={img}
                                             alt="Second slide"
                                             />
 
@@ -149,7 +146,7 @@ function Home(){
                                         <Carousel.Item>
                                             <img
                                             className="d-block w-100"
-                                            src="https://99designs-blog.imgix.net/blog/wp-content/uploads/2016/12/attachment_59520340-e1513615977421.jpg?auto=format&q=60&fit=max&w=930"
+                                            src={img}
                                             alt="Third slide"
                                             />
 
@@ -164,9 +161,10 @@ function Home(){
                             </Card.Body>
                         </Card>
 
-                    </Container> */}
+                    </Container>
                     
-                {/* </Container></Row> */}
+                
+                </Row>
                 {/* <Stack direction="horizontal" gap={3}>
   <div className="bg-light border">First item</div>
   <div className="bg-light border ms-auto">Second item</div>
@@ -192,7 +190,7 @@ function Home(){
        
         
         
-        </div>
+        
         </>
     )
 }

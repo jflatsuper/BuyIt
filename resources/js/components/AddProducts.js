@@ -3,7 +3,7 @@ import { Container, Form, FormCheck, FormControl, FormGroup, FormLabel, FormSele
 function AddProducts(){
     const [product,setProduct]=useState({
         name:'',
-        type:'',
+        type:'Shirt',
         isAvailable:false,
         large:false,
         medium:false,
@@ -71,7 +71,8 @@ function AddProducts(){
                 </FormGroup>
                 <FormGroup>
                     <FormLabel>Type:</FormLabel>
-                    <FormSelect name="type" value={product.type} onChange={onInputChange} autoFocus>
+                    <FormSelect name="type"  defaultValue={product.type} onChange={onInputChange} autoFocus required>
+                        <option value="nothing" disabled>Clothing Type</option>
                         <option>Shirt</option>
                         <option>Trouser</option>
                         <option>Skirt</option>

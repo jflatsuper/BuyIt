@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react';
 import { Card, Container,Badge,Button, FormSelect, FormCheck,Row, Col } from 'react-bootstrap';
 import Checkout from './Checkout'
 import '../../css/app.css';
-function Cart(){
+function Cart({updateOrders}){
     const[carted,setCart]=useState([]);
    
     
@@ -38,6 +38,15 @@ function Cart(){
     // }
     
     console.log(carted)
+    async function handleSuccess (reference, checked, unchecked){
+        console.log({reference:reference.reference,transid:reference.trans,checked})
+        window.axios.post('/api/checkout',{reference:reference.reference,transid:reference.trans,checked})
+        await setCart(unchecked)
+        const f= await (updateOrders)()
+        console.log(f)
+
+
+    }
     useEffect(()=>{
         window.axios.get('/api/cart').then(async (response)=>{
             console.log(response.data)
@@ -106,7 +115,7 @@ function Cart(){
                     
 
                 ))}
-                <Checkout carted={carted} total={total}/>
+                <Checkout carted={carted} handleSuccess={handleSuccess} total={total}/>
                 
 
             

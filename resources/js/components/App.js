@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Routes,Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes,Navigate, useNavigate ,useSearchParams} from 'react-router-dom';
 import CustomWrapper from './customwrapper';
 import CustomWrapper2 from './customwrapper2'
 import user from '../Models/user';
@@ -17,6 +17,9 @@ import SellerRegister from './authComps/SellerRegister'
 import CustomerRegister from './authComps/CustomerRegister'
 import CustomerLogin from './authComps/CustomerLogin'
 import SellerProducts from './SellerProducts';
+import Orders from './Orders'
+import ViewOrder from './ViewOrder';
+import SearchView from './Searchview';
 
 
 
@@ -24,13 +27,16 @@ function App() {
     const navigate=useNavigate();
     const[products,setProducts]=useState([])
     const[product,setProduct]=useState({})
+    const[orders,setOrders]=useState([])
     const[loading,setLoading]=useState(true)
+    const [params,setparams]=useSearchParams()
     useEffect(()=>{
-        window.axios.get("/api/products").then(async(response)=>{
+       ( async ()=>{
+        await window.axios.get("/api/products").then(async(response)=>{
             await setProducts(response.data);
             setLoading(false)
             console.log(response.data);
-        })
+        })})()
 
     },[]);
     
@@ -124,6 +130,19 @@ function App() {
         })
 
     }
+    useEffect(()=>{
+        (updateOrders)()
+      
+    },[])
+    const updateOrders=async ()=>{
+        window.axios.get('/api/orders')
+        .then(async resp=>{
+            console.log(resp.data)
+            await setOrders(resp.data)})
+        
+
+    }
+    
     const cartRem=(e,id)=>{
         e.persist();
         setLoading(true)
@@ -153,6 +172,15 @@ function App() {
         const product=products.find(product=>product.id===id)
         setProduct(product)
         navigate(`/dashboard/products/${id}`,{replace:false})
+    }
+    const handleSearch= async (val)=>{
+        setparams({ searched: val});
+        // const product= await products.filter(product=>(product.type.toLowerCase().includes(val.toLowerCase())||product.name.toLowerCase().includes(val.toLowerCase())))
+        // await console.log(val)
+        // console.log(products)
+        // await console.log(product)
+        // return product
+
     }
     
   
@@ -200,14 +228,18 @@ function App() {
                     <CustomWrapper 
                         isLoggedIn={user.isLoggedIn()}
                         role={user.role}
-                        view={<Dashboard/>}
+                        view={
+                            <Dashboard 
+                                handleSearch={handleSearch}
+                            />}
                          />
                 }>
-                    <Route path="cart" element={<Cart/>}/>
+                    <Route path="cart" element={<Cart updateOrders={updateOrders}/>}/>
                     <Route path='' element={<Home/>}/>
                     <Route path='products' element={
                         <Products
                         products={products}
+                        pars={params}
                         handleSpecificProduct={handleSpecificProduct}
                         cartRem={cartRem}
                         loading={loading}
@@ -220,11 +252,17 @@ function App() {
                             product={product}
                         />
                         }/>
-                        
-              
-                   
                     <Route path='profile' element={<Profile/>}/>
-                    
+                    <Route path='orders' element={
+                        <Orders
+                            orders={orders}
+                           
+                        />
+                        }/>
+                    <Route path='orders/:id' element={
+                    <ViewOrder
+                        orders={orders}
+                    />}/>
 
                 </Route>
                 

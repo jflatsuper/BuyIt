@@ -1,24 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate, Outlet, Route,Routes } from 'react-router-dom';
+import { Navigate, Outlet, Route,Routes, useNavigate, useSearchParams } from 'react-router-dom';
 import user from "../Models/user";
 import Logout from './authComps/Logout';
 import Cart from './Cart';
 import {Nav,Navbar,Container,NavDropdown,Row,Alert,InputGroup,FormControl,Button,ButtonGroup, NavItem,Dropdown} from 'react-bootstrap';
 import { Link, LinkContainer } from 'react-router-bootstrap';
+
 import '../../css/active.css';
 import '../../css/app.css';
 import img from '../../../public/img/main.png'
 
-
-
-
-function Dashboard(){
-    const [buyer,setBuyer]=useState({
-        date_of_birth:"1",
-    });
+function Dashboard({handleSearch}){
+    const [show, setShow] = useState(false);
+    const [query,setQuery]=useState('')
     const[search, setSearch]=useState("")
     const[dropdown,setDrop]=useState(false)
     const [searchitems,setItems]=useState([])
+    
+    const navigate=useNavigate()
+    
+    const showDropdown = (e)=>{
+        setShow(!show);
+    }
+    const hideDropdown = e => {
+        setShow(false);
+    }
+  
+    const [buyer,setBuyer]=useState({
+        date_of_birth:"1",
+    });
+    
     useEffect(()=>{
         window.axios.get('/api/basicdetails').then((response)=>{
             setBuyer({
@@ -31,17 +42,28 @@ function Dashboard(){
  
 
     const toggleDropdown = () => setDrop(true)
+    const searchIt=(e)=>{
+        e.preventDefault()
+        handleSearch(search)
+        
+     
+       
+
+    }
 
     const onInputChange=(e)=>{
         setSearch(e.target.value)
-        toggleDropdown()
+        
         console.log(dropdown)
         window.axios.post("/api/searchproducts",{
             var:search
-        }).then((response)=>{
+        }).then(async(response)=>{
             console.log(search)
             console.log(response.data)
-            setItems(response.data)
+            await setItems(response.data)
+            if(searchitems.length>=2){
+                toggleDropdown()
+            }
            
         })
 
@@ -68,30 +90,32 @@ function Dashboard(){
                     </Row>
                 </h5>
          </Alert>}
-            
-            <Navbar className="col-sm-12 " variant="light" expand="sm" style={{backgroundColor:"#00g00b",borderBottom:"1px solid black"}}>
-                <Container fluid>
+         
+            <Navbar sticky="top"  className=" col-sm-12 pb-0 " variant="light" expand="sm" style={{backgroundColor:"yellowgreen"}}>
+                <Container style={{}} >
                     
 
                     {/* Nav bar set at the top */}
-                    <Navbar.Brand className="offset-sm-1 col-sm-1" href="#home">
-                        <img
+                    <Navbar.Brand className="  col-sm-1" href="/">
+                        <img width="70px" height="auto"  className="img-responsive" src={img}  alt="logo" />
+           
+                        {/* <img
                             src={img}
-                            width="70%"
+                            width=""
                            
                             
                             alt="logo"
-                        />
+                        /> */}
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav defaultActiveKey='' fill className="me-auto col-sm-11 text-danger nav active" style={{}}>
+                        <Nav defaultActiveKey='' fill className=" col-sm-12 active" style={{backgroundColor:''}}>
                             <LinkContainer activeClassName="active1" to=''>
                                 <Nav.Link  >Home</Nav.Link>
                             </LinkContainer>
 
                             <LinkContainer activeClassName="active2" to='products'>
-                                <Nav.Link >Products</Nav.Link>
+                                <Nav.Link >Shop</Nav.Link>
                             </LinkContainer>
                            
                             
@@ -102,7 +126,10 @@ function Dashboard(){
                                     <NavDropdown.Item >Profile</NavDropdown.Item>
                                 </LinkContainer>
                                 <NavDropdown.Divider />
-                                    <NavDropdown.Item >Another action</NavDropdown.Item>
+                                <LinkContainer to='orders'>
+                                    <NavDropdown.Item >Orders</NavDropdown.Item>
+                                </LinkContainer>
+                                    
                                 <NavDropdown.Divider />
                                 <LinkContainer to="cart">
                                     <NavDropdown.Item >View Cart</NavDropdown.Item>
@@ -111,51 +138,67 @@ function Dashboard(){
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
-                            <NavItem className="col-sm-6">
+                            <NavItem >
                                 <InputGroup >
                                     <FormControl
                                     placeholder="Find...."
                                     aria-label="Search"
                                     aria-describedby="basic-addon2"
                                     name="var"
+                                    value={search}
                                     id="dropdown-autoclose-outside"
                                     autoComplete="false"
+                                    onClick={(e) => {toggleDropdown()
+                                      }}
                                     
                                     onChange={onInputChange}
                                     />
-                                    <Dropdown className="d-inline col-lg-12  mx-2" autoClose={true}  >
+                                    <Dropdown className=" col-sm-12  mx-2"  >
                              
 
-    <Dropdown.Menu   show={dropdown} >
-        { searchitems.length<1? "":searchitems.map((searchItem,index)=>(
-            <Dropdown.Item key={index} href="#">{searchItem.name}</Dropdown.Item>
-            
+                                        <Dropdown.Menu  className=" col-sm-12" show={dropdown} rootCloseEvent="click" >
+                                            { searchitems.length<1? "":searchitems.map((searchItem,index)=>(
+                                                <>
+                                                
+                                                <Dropdown.Item key={index} href="#" style={{width:'100%'}}>{searchItem.name}</Dropdown.Item>
+                                                
+                                                </>
+                                                
 
-        ))
-        }
-      
-    </Dropdown.Menu>
-  </Dropdown>
-                                    <Button style={{backgroundColor:"#189e37"}} type="submit" id="button-addon2"> 
+                                            ))
+                                            }
+                                        
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                    <Button style={{backgroundColor:"black"}} type="submit" id="button-addon2" onClick={searchIt}   > 
                                     Search
                                     </Button>
                                 </InputGroup>
                                 
-    
+                                {/* <Form className="d-flex"> */}
+        {/* <FormControl
+          type="search"
+          placeholder="Search"
+          className="me-2"
+          aria-label="Search"
+        />
+        <Button variant="outline-success">Search</Button>
+      </Form> */}
 
                             </NavItem>
                             
-                            <Nav.Item className="offset-sm-1"><Logout/></Nav.Item>
+                            <Nav.Item className=""><span style={{float:'right'}}><Logout/></span></Nav.Item>
                         
                         </Nav>
                     </Navbar.Collapse>
                    
                 </Container>
             </Navbar>
-            
-            <Container style={{backgroundColor:'thistle'}}>
-             <Outlet />
+            <Container style={{backgroundColor:'rgba(34,41,5,0.1)',minHeight:"100vh",height:'auto'}} fluid >
+            <Container style={{minHeight:"100vh",height:'auto'}} ><Outlet /></Container>
+             
             </Container>    
+      
            
             
             

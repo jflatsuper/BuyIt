@@ -25,21 +25,23 @@ class CartController extends Controller
             'num_of_related'=>DB::raw('num_of_related+1'),
 
         ]);
+        echo $addtoCart;
         if($addtoCart){
             
             // $cartid=$addtoCart->id;
             // finds the authenticated users cart
             // $cart=Cart::find($cartid);
             //adds the product to the pivot table by referencing carts and the product id
-            $added=$addtoCart->products()->syncWithoutDetaching($productid);
+            $added=$addtoCart->products001()->syncWithoutDetaching($productid);
             //increments the amount of products in the authenticated users cart  i.e one click increases the amount by one as well as set price
-            $addtoCart->products()->updateExistingPivot($productid,['amount' => DB::raw('amount+1'), 'price' =>$request->price]);
+            $addtoCart->products001()->updateExistingPivot($productid,['amount' => DB::raw('amount+1'), 'price' =>$request->price]);
             $product=Product::where('id',$productid)->with(['cart' => function ($query) {
                 $query->where('buyer_id', Auth::user()->id)->first();
               }])->first();
            
                 if($addtoCart){
-                    return response()->json(true);
+                   
+                    return response()->json($product);
 
                 }
             
@@ -54,11 +56,11 @@ class CartController extends Controller
         {
             return null;
         }
-        $user->cart->products()->newPivotStatement()->where('product_id', '=', $productid)  
+        $user->cart->products001()->newPivotStatement()->where('product_id', '=', $productid)  
         ->where('amount', '<=', 1)->delete();
         $cartid=$user->cart->id;
         //Removes product from cart if the product is greater than 0
-        $user->cart->products()->newPivotStatement()->where('product_id', '=', $productid)  
+        $user->cart->products001()->newPivotStatement()->where('product_id', '=', $productid)  
         ->where('amount', '>', 0)->update(array(
        'amount' =>DB::raw('amount-1')
    ));
@@ -74,7 +76,7 @@ class CartController extends Controller
     public function show(){
         $user=Auth::user();
         if($user->cart){
-            $carts=$user->cart->products;
+            $carts=$user->cart->products001;
             return $carts->toJson();
 
         }

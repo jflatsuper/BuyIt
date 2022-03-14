@@ -1,6 +1,9 @@
-.active1{
-    color: blue;
-    background-color: black;
+ .nav-link.active{
+    color: white;
+  
+    border-bottom:2px solid black;
+    transform: translateX(0.5rem);
+    transition: all 0.4s;
   }
   .active2{
     color: red;

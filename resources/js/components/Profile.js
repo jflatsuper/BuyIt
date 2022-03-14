@@ -77,7 +77,7 @@ function Profile(){
 
     return(
         <>
-        <Container>
+       
         <Form>
             <FormGroup>
                 <FormLabel>Name:</FormLabel>
@@ -114,7 +114,7 @@ function Profile(){
         </Form>
         
 
-        </Container>
+        
         </>
     )
 

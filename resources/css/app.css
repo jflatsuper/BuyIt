@@ -8,12 +8,15 @@
   
   .hover-1-content {
     position: absolute;
-    bottom: 0;
+    top: 80%;
     left: 0%;
+    overflow: hidden;
     
     width:100%;
     z-index: 0;
-    transition: all 2s;
+    height:20%;
+    background-color: rgba(34,41,5,0.1);
+    transition: all 1s;
     text-align: left;
   }
    /* <div className="hover hover-1 text-white rounded">
@@ -33,26 +36,33 @@
   .hover-1 .hover-overlay {
     background: rgba(0, 0, 0, 1);
   }
-  
-  .hover-1-description {
+  .hover-1-description0 {
     transform: translateY(0.5rem);
     transition: all 0.4s;
     
-    opacity: 0;
+    opacity: 1;
+  }
+  .hover-1-description {
+    transform: translateY(0.5rem);
+    transition: all 0.4s;
+    display: none;
+    
+    opacity: 1;
   }
   
   .hover-1:hover .hover-1-content {
-    left: 0%;
-    height:85%;
+    top: 0%;
+    height:100%;
     width: 100%;
-    background-color: black;
-    opacity: 0.5;
+    background-color: rgba(153, 170, 87, 0.8);
+    opacity: 0.8;
     text-align: left;
   }
   
   .hover-1:hover .hover-1-description {
     opacity: 1;
     transform: none;
+    display: block;
     
   }
   

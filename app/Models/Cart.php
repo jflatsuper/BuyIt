@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Customer;
 use App\Models\User;
-use App\Models\Products;
+use App\Models\Product;
 
 class Cart extends Model
 {
@@ -19,7 +19,7 @@ class Cart extends Model
       public function user(){
         return  $this->belongsTo(User::class,'buyer_id','id');
       }
-      public function products(){
+      public function products001(){
           return $this->belongsToMany(Product::class,'cart_product','cart_id','product_id')->withPivot('amount', 'price');
           //Uses PiVOT table to establish many to many relationship
       }
