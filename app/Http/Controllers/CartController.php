@@ -16,16 +16,17 @@ class CartController extends Controller
     // }
     public function updateCart(Request $request){
         $productid=$request->productId;
+        $action=$request->action;
         $user=Auth::user();
         // create a cart for the user if this is his first time adding an object to a cart
 
-       
+       if($action=='plus'){
         $addtoCart=$user->cart()->updateOrCreate(['buyer_id'=>$user->id],[
             'buyer_id'=>$user->id,
             'num_of_related'=>DB::raw('num_of_related+1'),
 
         ]);
-        echo $addtoCart;
+        
         if($addtoCart){
             
             // $cartid=$addtoCart->id;
@@ -46,34 +47,39 @@ class CartController extends Controller
                 }
             
             
-        }
-    }
-    public function removeFromCart(Request $request){
-        $productid=$request->productId;
-        $user=Auth::user();
+        }}elseif ($action=='minus') {
+           
        
-        if($user->cart===null)
-        {
-            return null;
-        }
-        $user->cart->products001()->newPivotStatement()->where('product_id', '=', $productid)  
-        ->where('amount', '<=', 1)->delete();
         $cartid=$user->cart->id;
         //Removes product from cart if the product is greater than 0
         $user->cart->products001()->newPivotStatement()->where('product_id', '=', $productid)  
         ->where('amount', '>', 0)->update(array(
        'amount' =>DB::raw('amount-1')
-   ));
+         ));
       
-   $product=Product::where('id',$productid)->with(['cart' => function ($query) {
-    $query->where('buyer_id', Auth::user()->id)->first();
-  }])->first();
-          
-
-  return ($product)->toJson();
+        $product=Product::where('id',$productid)->with(['cart' => function ($query) {
+            $query->where('buyer_id', Auth::user()->id)->first();
+        }])->first();
+        
+        return ($product)->toJson();
+        }
 
     }
+    public function removeFromCart(Request $request){
+        $user=Auth::user();
+
+        $done=$user->cart->products001()->newPivotStatement()->where('product_id', '=', $request->rid)->delete();
+        if ($done) {
+            return response()->json('done');
+        }
+        return response()->json('err');
+        
+
+
+    }
+   
     public function show(){
+        
         $user=Auth::user();
         if($user->cart){
             $carts=$user->cart->products001;

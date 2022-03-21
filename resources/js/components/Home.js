@@ -16,7 +16,7 @@ function Home(){
         <>
        
            
-            <Container  fluid className=" col-lg-10 offset-lg-1 " style={{height:"" ,backgroundColor:"#b4b8b5"}}  bg="dark">
+            
                 <Row className="mb-5">
                     <Container fluid className="col-lg-4 mt-5 " >
                         <h1>Featured</h1>
@@ -182,7 +182,7 @@ function Home(){
                 
                 
 
-            </Container>
+            
             
         
        

@@ -8,6 +8,7 @@ function AddProducts(){
         large:false,
         medium:false,
         small:false,
+        description:'',
         price:0,
         gender:'',
         color:'',
@@ -44,6 +45,7 @@ function AddProducts(){
         data.append('isAvailable',JSON.stringify(product.large))
         data.append('large',JSON.stringify(product.large))
         data.append('price',JSON.stringify(product.price))
+        data.append('description',product.description)
         data.append('medium',JSON.stringify(product.medium))
         data.append('small',JSON.stringify(product.small))
         data.append('gender',product.gender)
@@ -81,6 +83,10 @@ function AddProducts(){
                         Your clothing definitely could be here
                     </FormText>
 
+                </FormGroup>
+                <FormGroup>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl type="textarea" placeholder="Product Description" name='description' value={product.description} onChange={onInputChange}/>
                 </FormGroup>
                 <FormGroup>
                     <FormLabel>Price:</FormLabel>

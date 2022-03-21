@@ -32,7 +32,7 @@ Route::post('/pay', [PaymentController::class, 'redirectToGateway']);
 Route::get('/payment/callback', [PaymentController::class, 'handleGatewayCallback']);
 Route::get('cart',[CartController::class,'show']);
 Route::put('addCart',[CartController::class,'updateCart']);
-Route::put('remCart',[CartController::class,'removeFromCart']);
+Route::delete('remove',[CartController::class,'removeFromCart']);
 Route::post('searchproducts',[ProductController::class,'find']);
 
 Route::post('checkout',[SoldController::class,'checkout']);
@@ -46,8 +46,7 @@ Route::middleware(['Models:sanctum'])->group (function (){
     
     Route::post('/logout', [LoginController::class, 'logouts']);
     Route::get('/basicdetails',[BuyerController::class,'showBuyerDetails']);
-    Route::put('/changeAddress',[BuyerController::class,'updateAddress']);
-    Route::put('/changeDOB',[BuyerController::class,'changeDateofBirth']);
+    Route::put('/details',[BuyerController::class,'details']);
     Route::get('/sellerproducts',[ProductController::class,'sellerprod']);
     
   

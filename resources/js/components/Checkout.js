@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FormGroup ,Container,Form,Button} from 'react-bootstrap';
+import {BsBagCheck} from 'react-icons/bs'
 import user from '../Models/user'
 import {PaystackButton } from 'react-paystack';
 
@@ -38,7 +39,7 @@ function Checkout({total,carted,handleSuccess}){
   
     const componentProps = {
           ...config,
-          text: 'SUBMIT',
+          text: <BsBagCheck style={{color:'yellowgreen'}}/>,
           
           onSuccess: (reference) => handlePaystackSuccessAction(reference),
           onClose: handlePaystackCloseAction,
@@ -56,7 +57,7 @@ function Checkout({total,carted,handleSuccess}){
         
         <Container>
           
-           <PaystackButton {...componentProps} />
+           <PaystackButton className='btn btn-dark btn-md' style={{width:'auto'}} {...componentProps} />
         </Container>
     )
 

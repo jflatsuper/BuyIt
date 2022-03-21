@@ -25,20 +25,89 @@ import SearchView from './Searchview';
 
 function App() {
     const navigate=useNavigate();
-    const[products,setProducts]=useState([])
-    const[product,setProduct]=useState({})
-    const[orders,setOrders]=useState([])
-    const[loading,setLoading]=useState(true)
+    const[ products,setProducts]=useState([])
+    const [orders,setOrders]=useState([])
+    const [loading,setLoading]=useState(true)
     const [params,setparams]=useSearchParams()
+    const [images,setImages]=useState([])
+    const [buyer,setBuyer]=useState();
+    
     useEffect(()=>{
-       ( async ()=>{
-        await window.axios.get("/api/products").then(async(response)=>{
-            await setProducts(response.data);
-            setLoading(false)
-            console.log(response.data);
-        })})()
-
+        window.axios.get("/api/products").then((response)=>{
+            console.log(response.data)
+            setProducts(response.data)}) 
+        setLoading(false)
     },[]);
+    useEffect(()=>{
+
+    },[])
+
+    useEffect(()=>{
+       
+        if(user.isLoggedIn()===false){
+            return null
+        }
+        window.axios.get('/api/basicdetails').then((response)=>{
+            console.log(response.data)
+            setBuyer({date_of_birth:response.data.date_of_birth,address:response.data.address});
+
+        });
+    },[user.isLoggedIn()]);
+    useEffect(()=>{
+        if(user.isLoggedIn()===false){
+            return null
+        }
+        
+        (updateOrders)()
+      
+    },[user.isLoggedIn()])
+    const updateOrders=async ()=>{
+        window.axios.get('/api/orders')
+        .then(async resp=>{
+            console.log(resp.data)
+            await setOrders(resp.data)})
+        
+
+    }
+    const onUpdate=(e,obj)=>{
+        e.preventDefault();
+        window.axios.put("/api/details",{birth:obj.dob,address:obj.address}).then((response)=>{
+            console.log(response.data);
+            setBuyer({
+                date_of_birth:response.data.date_of_birth,
+                address:response.data.address
+
+           })
+        }); 
+    }
+    // const preloadImages = (products) => {
+    //     let links = products.map(product=>product.productimage)
+    //     console.log(links)
+    
+    //     /* the one react-specific thing is this.setState */
+    //     setImages(
+    //         links.map((link,i)=>{
+    //             var img=new Image()
+    //             img.onload=()=>handleImageLoad(i)
+    //             img.src=link
+    //             return{
+    //                 url: link,
+    //                 loaded: false
+    
+    //             }
+    
+    //         })
+
+    //     )
+       
+    // }
+    // const handleImageLoad = (index) => {
+    //         console.log(images)
+    //         var imaged  = images
+    //         imaged[index].loaded = true
+    //         console.log(imaged)
+    //         setImages(imaged)
+    // }
     
     const authenticatedCallback = () => {
         navigate('/dashboard',{replace:true})
@@ -88,60 +157,45 @@ function App() {
             }
         });
     }
-    const cartUpdate=(e,id,price)=>{
+    const cartUpdate= async (e,id,price,action)=>{
         e.persist();
-        setLoading(true)
         //Add an item to user cart( for authenticated users)
-        window.axios.put("/api/addCart",{
-            productId:id,
-            price:price
-
-        }).then((response)=>{
-            console.log(response.data)
-            console.log(products[0])
-            let updatedproduct=products.map(product=>{
-                return product.id===id?{
-                    ...product,
-                    cart:product.cart.map((carted,index)=>{
-                        return index===0?{
-                            ...carted,
-                            pivot:{
-                                ...carted.pivot,
-                                amount:carted.pivot.amount+1
-                            }
+        const response= await window.axios.put("/api/addCart",{productId:id,price:price,action:action})
+        
+        console.log(response)
+        // then((response)=>{
+        //     console.log(response.data)
+        //     console.log(products[0])
+        //     let updatedproduct=products.map(product=>{
+        //         return product.id===id?{
+        //             ...product,
+        //             cart:product.cart.map((carted,index)=>{
+        //                 return index===0?{
+        //                     ...carted,
+        //                     pivot:{
+        //                         ...carted.pivot,
+        //                         amount:carted.pivot.amount+1
+        //                     }
                             
 
 
                             
                            
-                        }:
-                        carted
-                    })
+        //                 }:
+        //                 carted
+        //             })
 
 
-                }     
-                :product;   
-             })
-             console.log(updatedproduct)
+        //         }     
+        //         :product;   
+        //      })
+        //      console.log(updatedproduct)
+            return false
 
-            setProducts(updatedproduct)
-            setLoading(false)
-
-        })
-
-    }
-    useEffect(()=>{
-        (updateOrders)()
-      
-    },[])
-    const updateOrders=async ()=>{
-        window.axios.get('/api/orders')
-        .then(async resp=>{
-            console.log(resp.data)
-            await setOrders(resp.data)})
         
 
     }
+   
     
     const cartRem=(e,id)=>{
         e.persist();
@@ -168,20 +222,7 @@ function App() {
         })
 
     }
-    const handleSpecificProduct=(e,id)=>{
-        const product=products.find(product=>product.id===id)
-        setProduct(product)
-        navigate(`/dashboard/products/${id}`,{replace:false})
-    }
-    const handleSearch= async (val)=>{
-        setparams({ searched: val});
-        // const product= await products.filter(product=>(product.type.toLowerCase().includes(val.toLowerCase())||product.name.toLowerCase().includes(val.toLowerCase())))
-        // await console.log(val)
-        // console.log(products)
-        // await console.log(product)
-        // return product
-
-    }
+ 
     
   
    
@@ -230,29 +271,40 @@ function App() {
                         role={user.role}
                         view={
                             <Dashboard 
-                                handleSearch={handleSearch}
+                                buyer={buyer}
                             />}
                          />
                 }>
-                    <Route path="cart" element={<Cart updateOrders={updateOrders}/>}/>
+                    <Route path="cart" element={
+                        <Cart
+
+                             updateOrders={updateOrders}
+                            
+                             cartUpdate={cartUpdate}/>
+                    }/>
                     <Route path='' element={<Home/>}/>
                     <Route path='products' element={
                         <Products
                         products={products}
                         pars={params}
-                        handleSpecificProduct={handleSpecificProduct}
-                        cartRem={cartRem}
+                        
                         loading={loading}
                         cartUpdate={cartUpdate}
                         />
                     }/>
                     <Route path="products/:id" element={
                         <ProductView
-                        
-                            product={product}
+                            loading={loading}
+                            products={products}
+                            cartUpdate={cartUpdate}
                         />
                         }/>
-                    <Route path='profile' element={<Profile/>}/>
+                    <Route path='profile' element={
+                        <Profile
+                            buyer={buyer}
+                            onUpdate={onUpdate}
+                            />}
+                    />
                     <Route path='orders' element={
                         <Orders
                             orders={orders}

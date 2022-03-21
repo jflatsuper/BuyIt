@@ -17,30 +17,14 @@ class BuyerController extends Controller
 
 
      }
-     public function updateAddress(Request $request){
-        $user=Auth::user();
-        $buyer=$user->buyers->update([
+     public function details(Request $request){
+        $user=Auth::user()->buyers;
+        $buyer=$user->update([
+            'date_of_birth'=>$request->birth,
             'address'=>$request->address,
         ]);
-        
-        
-        
-        return $request->address;
-
-
-     }
-     public function changeDateofBirth(Request $request){
-        $user=Auth::user();
-        $buyer=$user->buyers->update([
-            'date_of_birth'=>$request->birth,
-        ]);
-        
-        
-        
-        return $request->birth;
-
-
-
+   
+        return $user;
      }
 }
 

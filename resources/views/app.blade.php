@@ -11,6 +11,7 @@
         
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link href="{{ asset('css/active.css') }}" rel="stylesheet">
+        <link href='https://fonts.googleapis.com/css?family=Poppins:wght@900&display=swap' rel='stylesheet'>
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
         <script  defer src="/js/app.js"></script>
        
@@ -23,7 +24,8 @@
 
         <style>
             body {
-                font-family: 'Nunito', sans-serif;
+                font-family: 'Poppins','Courier New', monospace ;
+                /* 'Courier New', monospace */
             }
             
         </style>

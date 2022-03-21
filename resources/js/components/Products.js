@@ -1,9 +1,9 @@
 import React, { useEffect,useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import GenProduct from './GenProduct'
 
 
-function Products({products,handleSpecificProduct,cartUpdate,cartRem,loading,pars}){
+
+function Products({products,cartUpdate,cartRem,loading,pars}){
     const [prod,setprod]=useState([])
     
    useEffect(()=>{
@@ -29,7 +29,7 @@ function Products({products,handleSpecificProduct,cartUpdate,cartRem,loading,par
         <GenProduct
             loading={loading}
             products={prod}
-            handleSpecificProduct={handleSpecificProduct}
+           
         />
         
     )

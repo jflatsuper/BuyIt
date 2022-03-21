@@ -9,13 +9,30 @@ import { Link, LinkContainer } from 'react-router-bootstrap';
 import '../../css/active.css';
 import '../../css/app.css';
 import img from '../../../public/img/main.png'
+import { useLocation } from 'react-router';
 
-function Dashboard({handleSearch}){
+function Dashboard({buyer}){
     const [show, setShow] = useState(false);
     const [query,setQuery]=useState('')
+    const [buy,setbuy]=useState({
+        date_of_birth:'1'
+    })
     const[search, setSearch]=useState("")
     const[dropdown,setDrop]=useState(false)
     const [searchitems,setItems]=useState([])
+    const url=useLocation()
+    useEffect(()=>{
+        if(buyer){
+            setbuy({
+                date_of_birth:buyer.date_of_birth
+            })
+
+        }
+        
+
+    },[buyer])
+    
+    
     
     const navigate=useNavigate()
     
@@ -26,25 +43,17 @@ function Dashboard({handleSearch}){
         setShow(false);
     }
   
-    const [buyer,setBuyer]=useState({
-        date_of_birth:"1",
-    });
-    
-    useEffect(()=>{
-        window.axios.get('/api/basicdetails').then((response)=>{
-            setBuyer({
-                ...buyer,
-                date_of_birth:response.data.date_of_birth});
-
-        });
-    },[]);
-    console.log(buyer);
  
 
     const toggleDropdown = () => setDrop(true)
     const searchIt=(e)=>{
+        if(!search){
+            return 0;
+        }
         e.preventDefault()
-        handleSearch(search)
+        navigate(`products?searched=${search}`)
+        
+        
         
      
        
@@ -57,13 +66,15 @@ function Dashboard({handleSearch}){
         console.log(dropdown)
         window.axios.post("/api/searchproducts",{
             var:search
-        }).then(async(response)=>{
+        }).then((response)=>{
             console.log(search)
             console.log(response.data)
-            await setItems(response.data)
+            setItems(response.data)
             if(searchitems.length>=2){
                 toggleDropdown()
-            }
+            }else(
+                setDrop(false)
+            )
            
         })
 
@@ -76,7 +87,7 @@ function Dashboard({handleSearch}){
     return(
         <>
         <div>
-        {buyer.date_of_birth?null:
+        {buy?.date_of_birth?null:
         <Alert variant="warning"  className="col-lg-12 text-center mb-0" dismissible>
             
                 <h5 className="col-lg-12">
@@ -91,31 +102,34 @@ function Dashboard({handleSearch}){
                 </h5>
          </Alert>}
          
-            <Navbar sticky="top"  className=" col-sm-12 pb-0 " variant="light" expand="sm" style={{backgroundColor:"yellowgreen"}}>
+            <Navbar sticky="top" collapseOnSelect className=" col-sm-12 pb-0 " variant="light" expand="sm" style={{backgroundColor:"yellowgreen"}}>
                 <Container style={{}} >
                     
 
                     {/* Nav bar set at the top */}
-                    <Navbar.Brand className="  col-sm-1" href="/">
-                        <img width="70px" height="auto"  className="img-responsive" src={img}  alt="logo" />
-           
-                        {/* <img
-                            src={img}
-                            width=""
-                           
+                    <LinkContainer to ='/dashboard'>
+                        <Navbar.Brand className="  col-sm-1" >
+                            <img width="70px" height="auto"  className="img-responsive" src={img}  alt="logo" />
+            
+                            {/* <img
+                                src={img}
+                                width=""
                             
-                            alt="logo"
-                        /> */}
-                    </Navbar.Brand>
+                                
+                                alt="logo"
+                            /> */}
+                        </Navbar.Brand>
+                    </LinkContainer>
+                   
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav defaultActiveKey='' fill className=" col-sm-12 active" style={{backgroundColor:''}}>
+                        <Nav activeKey={url.pathname} fill className=" col-sm-12 active" style={{backgroundColor:''}}>
                             <LinkContainer activeClassName="active1" to=''>
-                                <Nav.Link  >Home</Nav.Link>
+                                <Nav.Link  eventKey="/dashboard"  >Home</Nav.Link>
                             </LinkContainer>
 
                             <LinkContainer activeClassName="active2" to='products'>
-                                <Nav.Link >Shop</Nav.Link>
+                                <Nav.Link eventKey="/dashboard/products" >Shop</Nav.Link>
                             </LinkContainer>
                            
                             
@@ -139,41 +153,49 @@ function Dashboard({handleSearch}){
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
                             <NavItem >
+                                
+                                <Row className=" col-lg-12 mx-2 " >
                                 <InputGroup >
                                     <FormControl
-                                    placeholder="Find...."
-                                    aria-label="Search"
-                                    aria-describedby="basic-addon2"
-                                    name="var"
-                                    value={search}
-                                    id="dropdown-autoclose-outside"
-                                    autoComplete="false"
-                                    onClick={(e) => {toggleDropdown()
-                                      }}
-                                    
-                                    onChange={onInputChange}
-                                    />
-                                    <Dropdown className=" col-sm-12  mx-2"  >
-                             
-
-                                        <Dropdown.Menu  className=" col-sm-12" show={dropdown} rootCloseEvent="click" >
-                                            { searchitems.length<1? "":searchitems.map((searchItem,index)=>(
-                                                <>
-                                                
-                                                <Dropdown.Item key={index} href="#" style={{width:'100%'}}>{searchItem.name}</Dropdown.Item>
-                                                
-                                                </>
-                                                
-
-                                            ))
-                                            }
+                                        placeholder="Find...."
+                                        aria-label="Search"
+                                        aria-describedby="basic-addon2"
+                                        name="var"
+                                        value={search}
                                         
-                                        </Dropdown.Menu>
-                                    </Dropdown>
-                                    <Button style={{backgroundColor:"black"}} type="submit" id="button-addon2" onClick={searchIt}   > 
-                                    Search
+                                        id="dropdown-autoclose-outside"
+                                        autoComplete="false"
+                                        onChange={onInputChange}
+                                    />
+                                    <Button style={{backgroundColor:"black"}} type="submit" id="button-addon2" onClick={searchIt}    > 
+                                        Search
                                     </Button>
-                                </InputGroup>
+                                    </InputGroup>
+
+                                </Row>
+                                   
+                                <Row className=" col-lg-12 mx-2" >
+                                        <Dropdown   >
+                                            <Dropdown.Menu style={{width:'100%'}} show={dropdown} rootCloseEvent="click"  >
+                                                { searchitems.length<1? "":searchitems.map((searchItem,index)=>(
+                                                    <>
+                                                    <LinkContainer to={`products/${searchItem.id}`}>
+                                                        <Dropdown.Item key={index} href="#" style={{width:'100%'}}>{searchItem.name}</Dropdown.Item>
+                                                    </LinkContainer>
+                                                    
+                                                    
+                                                    </>
+                                                    
+
+                                                ))
+                                                }
+                                            
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </Row>
+                                    
+                                    
+                                
                                 
                                 {/* <Form className="d-flex"> */}
         {/* <FormControl
@@ -187,7 +209,7 @@ function Dashboard({handleSearch}){
 
                             </NavItem>
                             
-                            <Nav.Item className=""><span style={{float:'right'}}><Logout/></span></Nav.Item>
+                            <Nav.Item ><div style={{width:'100%'}}><span style={{float:'right'}}><Logout /></span> </div></Nav.Item>
                         
                         </Nav>
                     </Navbar.Collapse>
