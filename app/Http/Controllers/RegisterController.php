@@ -15,6 +15,11 @@ class RegisterController extends Controller
         return $product;
     }
     public function create(Request $request):JsonResponse{
+        $validated=$request->validate([
+            'name'=>['required','min:6'],
+            'email'=>['required','email','unique:users'],
+            'password'=>['required','min:8','confirmed']
+        ]);
        $usercreate= User::create([
            'name'=>$request->name,
            'email'=>$request->email,

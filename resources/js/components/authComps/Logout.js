@@ -6,7 +6,7 @@ import {BsBoxArrowInRight} from 'react-icons/bs'
 function Logout({history}){
     const navigate=useNavigate();
     const afterUserDestroyed=()=>{
-        navigate('/login',{replace:true});
+        navigate('/auth/login',{replace:true});
     }
     
     const onLogout=(e)=>{

@@ -20,6 +20,9 @@ import SellerProducts from './SellerProducts';
 import Orders from './Orders'
 import ViewOrder from './ViewOrder';
 import SearchView from './Searchview';
+import AuthenticatedTabView from './authComps/AuthenticationTabs';
+import SellersAuthenticationView from './authComps/SellersAuth';
+import SideBar from './SideBar1';
 
 
 
@@ -31,6 +34,7 @@ function App() {
     const [params,setparams]=useSearchParams()
     const [images,setImages]=useState([])
     const [buyer,setBuyer]=useState();
+    const [error,setError]=useState()
     
     useEffect(()=>{
         window.axios.get("/api/products").then((response)=>{
@@ -44,23 +48,24 @@ function App() {
 
     useEffect(()=>{
        
-        if(user.isLoggedIn()===false){
-            return null
-        }
-        window.axios.get('/api/basicdetails').then((response)=>{
+        user.email? window.axios.get('/api/basicdetails').then((response)=>{
             console.log(response.data)
+            console.log(user.email)
             setBuyer({date_of_birth:response.data.date_of_birth,address:response.data.address});
 
-        });
-    },[user.isLoggedIn()]);
-    useEffect(()=>{
-        if(user.isLoggedIn()===false){
-            return null
-        }
+        }):console.log('this is '+user.email)
+            
         
-        (updateOrders)()
+        // console.log(' this is the user.loggedun'+user.isLoggedIn())
+       
+    },[user.email]);
+    useEffect(()=>{
+        user.email?(updateOrders)():console.log('user .loggedin is false')
+        
+        
+        
       
-    },[user.isLoggedIn()])
+    },[user.email])
     const updateOrders=async ()=>{
         window.axios.get('/api/orders')
         .then(async resp=>{
@@ -123,26 +128,36 @@ function App() {
                 
                 user.authenticated(response.data,callback);
                 
-               } ).catch(
-                   (response)=>{
-                       setError("Invalid Details.Please check signin details and try again");
+               } ).catch((error)=>{
+                       console.log(error.response.data.errors)
+                    //    setError(error.response.data.errors.email)
+                    setError({loginemail:error.response.data.errors.email})
+
+                       setTimeout(()=>{setError(null)},9000)
+                       
+                           
+                        
+                    
                    }
                )
     }
     const handleRegister=(e,callback,values)=>{
         e.preventDefault();
         window.axios.post("/api/checkEmail",values).then((response)=>{
-            if(response.data){
-                setError({
-                    ...errors,
-                    emailError:"Email already linked with existing user"
-                });
-            }else{
-                if(values.password!==values.confirm_password){
+            // if(response.data){
+                
+            //     setError(
+            //         {regemail:"Email already linked with existing user"}
+            //     );
+            //     setTimeout(()=>{setError(null)},5000)
+            // }else{
+        })
+                if(values.password!==values.password_confirmation){
                     setError({
-                        ...errors,
+                        
                         confError:"Password does not match"
                     });
+                    return setTimeout(()=>{setError(null)},5000)
 
 
                 }
@@ -151,16 +166,21 @@ function App() {
                         console.log(response)
                         user.authenticated(response.data,callback);
 
+                    }).catch((err)=>{
+                        console.log('err')
+                        console.log(err.response.data.errors)
+                        setError(err.response.data.errors)
+                        return setTimeout(()=>{setError(null)},5000)
                     })
                 }
 
-            }
-        });
+        
+        
     }
-    const cartUpdate= async (e,id,price,action)=>{
+    const cartUpdate= async (e,id,price,size,action)=>{
         e.persist();
         //Add an item to user cart( for authenticated users)
-        const response= await window.axios.put("/api/addCart",{productId:id,price:price,action:action})
+        const response= await window.axios.put("/api/addCart",{productId:id,price:price,action:action,size:size})
         
         console.log(response)
         // then((response)=>{
@@ -235,29 +255,41 @@ function App() {
             <Routes>
                 
                 
-                <Route path="/login" element={<CustomerLogin
-                    handleLogin={handleLogin}
-                    callback={authenticatedCallback}/>}
-                />
-                <Route path="/signup" element={<CustomerRegister
-                    handleRegister={handleRegister}
-                    callback={authenticatedCallback}/>}
+                
+                <Route path='/auth' element={<AuthenticatedTabView/>}>
+                    <Route path="login" element={<CustomerLogin
+                        handleLogin={handleLogin}
+                        error={error}
+                        callback={authenticatedCallback}/>}
+                    />
+                    <Route path="signup" element={<CustomerRegister
+                        handleRegister={handleRegister}
+                        error={error}
+                        callback={authenticatedCallback}/>}
 
-                />
-                <Route path="/seller/login" element={<SellerLogin
-                    handleLogin={handleLogin}
-                    callback={sellerAuthenticatedCallback}/>}
-                />
-                <Route path="/seller/signup" element={<SellerRegister
-                    handleRegister={handleRegister}
-                    callback={sellerAuthenticatedCallback}/>}
+                    />
 
-                />
+                </Route>
+                <Route path='/seller' element={<SellersAuthenticationView/>}>
+                    <Route path="login" element={<SellerLogin
+                        handleLogin={handleLogin}
+                        error={error}
+                        callback={sellerAuthenticatedCallback}/>}
+                    />
+                    <Route path="signup" element={<SellerRegister
+                        handleRegister={handleRegister}
+                        error={error}
+                        callback={sellerAuthenticatedCallback}/>}
+
+                    />
+
+                </Route>
+                
                 <Route path="/seller/dashboard" element={
                     <CustomWrapper2
                     isLoggedIn={user.isLoggedIn()}
                     role={user.role}
-                    view={<SellerDashboard/>}/>
+                    view={<SideBar/>}/>
                     
                 }>
                     <Route path="addproducts" element={<AddProducts/>}/>
@@ -282,7 +314,9 @@ function App() {
                             
                              cartUpdate={cartUpdate}/>
                     }/>
-                    <Route path='' element={<Home/>}/>
+                    <Route path='' element={<Home/>}>
+                        
+                    </Route>
                     <Route path='products' element={
                         <Products
                         products={products}

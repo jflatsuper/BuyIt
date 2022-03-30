@@ -140,66 +140,76 @@ function Cart({updateOrders,cartUpdate}){
      :
      <>
      <br/>
-     <Container >
+     <Container fluid>
         
          
       
 
             {
                 carted.map((cartitem)=>(
-                    <Row key={cartitem.id} xs={1}>
-                        <Col>
-                        <Card  className="shadow my-2  rounded">
-                
-                        <Card.Body >
-                            <Row style={{width:'100%'}} lg={2} xs={2}>
-                                <Col style={{height:'100px'}} className="d-flex align-items-center" lg={1} xs={2} >
-                                    <FormCheck
-                                    defaultChecked={cartitem.checked}
-                                    value={cartitem.checked}
-                                    id={cartitem.id}
-                                    
-                                    onChange={onCheck} />
-                                </Col>
-                                <Col xs={10} lg={10} >
-                                    <Row style={{height:'100px'}}>
-                                        <Col style={{height:'100%'}} lg={2}  xs={6}>
-                                            <Image src={img||cartitem.productimage} thumbnail style={{height:'90%',width:'100%',objectFit:'cover'}}/>
-
+                    <Row key={cartitem.id} xs={1} className='g-0 mr-0'>
+                        <Col className='pr-0'>
+                            <Card  className="shadow my-2  rounded">
+                    
+                                <Card.Body >
+                                    <Row style={{width:'100%'}} lg={2} xs={2}>
+                                        <Col style={{height:'100px'}} className="d-flex align-items-center" lg={1} xs={2} >
+                                            <FormCheck
+                                            defaultChecked={cartitem.checked}
+                                            value={cartitem.checked}
+                                            id={cartitem.id}
+                                            className="mx-0"
+                                            
+                                            onChange={onCheck} />
                                         </Col>
-                                        <Col lg={10} xs={6}>
-                                            <Row xs={1} lg={1}>
-                                                <Col xs={12}>
-                                                    <b><p><span style={{width:'100%',overflowY:'clip',textOverflow:'ellipsis',whiteSpace:'nowrap',float:'left'}}>{cartitem.name}</span><span >&#8358;{cartitem.price}</span></p></b>
-                                                    <p>
-                                                        
-                                                            <BsFillPlusSquareFill onClick={(e)=>cartfunc(e,cartitem.id,cartitem.price,'plus')} />
-                                                            <span className="mx-2"> {cartitem.pivot.amount}</span>
-                                                            {cartitem.pivot.amount>1?<BsFillDashSquareFill onClick={(e)=>cartfunc(e,cartitem.id,cartitem.price,'minus')}/>:<BsFillDashSquareFill style={{color:'grey'}}/>}
+                                        <Col xs={10} lg={10} >
+                                            <Row style={{height:'100px'}}>
+                                                <Col style={{height:'100%'}} lg={2}  xs={6}>
+                                                    <Image src={img||cartitem.productimage} thumbnail style={{height:'90%',width:'100%',objectFit:'cover'}}/>
 
-                                                          
-                                                            <span style={{float:'right'}}><BsTrash onClick={(e)=>remove(e,cartitem.id)}style={{color:'yellowgreen'}}/></span>
-                                                    </p>
                                                 </Col>
+                                                <Col  xs={6} lg={10}>
+                                                    <Row xs={1} lg={1}>
+                                                        <Col xs={12}>
+                                                            <b>
+                                                                <p>
+                                                                    <span style={{width:'100%',overflowY:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap',float:'left'}}>
+                                                                        {cartitem.name}
+                                                                    </span>
+                                                                    <span >
+                                                                        &#8358;{cartitem.price}
+                                                                    </span>
+                                                                </p>
+                                                            </b>
+                                                            <p>
+                                                                
+                                                                    <BsFillPlusSquareFill onClick={(e)=>cartfunc(e,cartitem.id,cartitem.price,'plus')} />
+                                                                    <span className="mx-2"> {cartitem.pivot.amount}</span>
+                                                                    {cartitem.pivot.amount>1?<BsFillDashSquareFill onClick={(e)=>cartfunc(e,cartitem.id,cartitem.price,'minus')}/>:<BsFillDashSquareFill style={{color:'grey'}}/>}
+
+                                                                
+                                                                    <span style={{float:'right'}}><BsTrash onClick={(e)=>remove(e,cartitem.id)}style={{color:'yellowgreen'}}/></span>
+                                                            </p>
+                                                        </Col>
+                                                        
+                                                            
+                                                        
+                                                    </Row>
+                                                
                                                 
                                                     
+                                                </Col>
                                                 
                                             </Row>
-                                        
-                                           
+                                            
                                             
                                         </Col>
-                                        
-                                    </Row>
-                                    
-                                    
-                                </Col>
 
-                            </Row>
-                    
-                        </Card.Body>
-            
-                     </Card>
+                                    </Row>
+                            
+                                </Card.Body>
+                
+                            </Card>
                         </Col>
                         
 
@@ -208,7 +218,7 @@ function Cart({updateOrders,cartUpdate}){
                 ))}
                 <br/><br/><br/>
 
-                 <Card className='rounded '  style={{position:'fixed',width:'100%',left:'0%',right:'0%',bottom:'0%',height:'auto',backgroundColor:'yellowgreen',}}>
+                 <Card className='rounded '  style={{position:'fixed',left:'0%',right:'0%',bottom:'0%',height:'auto',backgroundColor:'yellowgreen',}}>
                     <Card.Body >
                         <Row  className='d-flex align-items-center text-center justify-content-center ' xs={1}>
                             <Col>

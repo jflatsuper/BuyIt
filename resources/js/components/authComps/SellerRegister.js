@@ -1,16 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import Register from './Register'
-function SellerRegister({handleRegister,callback}){
+function SellerRegister({handleRegister,callback,error}){
     return(
         <>
-        <p>Welcome to seller Registration PAGE</p>
+       
         <Register
             handleRegister={handleRegister}
             callback={callback}
             role={2}
+            error={error}
         />
-        <Link to="/seller/login">signin</Link>
+        
         </>
     )
 

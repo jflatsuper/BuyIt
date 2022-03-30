@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Sold;
 use App\Models\Cart;
+use App\Models\Product;
 use Auth;
 
 
@@ -13,6 +14,9 @@ class SoldController extends Controller
     
     public function checkout(Request $request){
         $user=Auth::user();
+        echo('this');
+        echo($request->checked);
+
         
         $sold=Sold::create([
                 //'product_id'=>$val['id'],

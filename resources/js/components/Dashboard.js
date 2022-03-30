@@ -102,7 +102,7 @@ function Dashboard({buyer}){
                 </h5>
          </Alert>}
          
-            <Navbar sticky="top" collapseOnSelect className=" col-sm-12 pb-0 " variant="light" expand="sm" style={{backgroundColor:"yellowgreen"}}>
+            <Navbar sticky="top" collapseOnSelect className=" col-sm-12 py-0 " variant="light" expand="sm" style={{backgroundColor:"yellowgreen"}}>
                 <Container style={{}} >
                     
 

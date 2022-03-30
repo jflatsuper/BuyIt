@@ -20,7 +20,7 @@ class Cart extends Model
         return  $this->belongsTo(User::class,'buyer_id','id');
       }
       public function products001(){
-          return $this->belongsToMany(Product::class,'cart_product','cart_id','product_id')->withPivot('amount', 'price');
+          return $this->belongsToMany(Product::class,'cart_product','cart_id','product_id')->withPivot('amount', 'price','size');
           //Uses PiVOT table to establish many to many relationship
       }
 

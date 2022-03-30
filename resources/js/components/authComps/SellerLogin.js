@@ -1,14 +1,25 @@
 import React from 'react'
 import Login from './Login'
-function SellerLogin({handleLogin,callback}){
+
+function SellerLogin({handleLogin,callback,error}){
     return(
         <>
-        <p>Welcome to seller login page</p>
-        <Login 
-            handleLogin={handleLogin}
-            callback={callback}
-            role={2}
-        />
+      
+       
+                
+      
+            
+                <Login 
+                    handleLogin={handleLogin}
+                    callback={callback}
+                    role={2}
+                    error={error}
+                />
+                
+        
+                
+            
+        
         </>
     )
 

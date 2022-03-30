@@ -14,7 +14,6 @@ class ProductController extends Controller
         $credentials=$request->validate([
             'name'=>["required"],
             'type'=>["required"],
-            'isAvailable'=>["required"],
             'description'=>["required"],
 
             'large'=>["required"],
@@ -47,7 +46,7 @@ class ProductController extends Controller
             'name' => $credentials['name'],
             'type' => $credentials['type'],
             
-            'is_available'=>json_decode($credentials['isAvailable']),
+            
             'large'=>json_decode($credentials['large']),
             'medium'=>json_decode($credentials['medium']),
             'seller_id'=>Auth::user()->id,
@@ -59,14 +58,14 @@ class ProductController extends Controller
             "productimage"=>$path,
             "productpublicid"=>$public_id,
         ]);
-        return response()->json($path);
+        return response()->json($product);
     
 }
     public function show(){
         
        
       
-        $products8=Product::where('is_available',true)->get();
+        $products8=Product::where('large','>',0)->OrWhere('medium','>',0)->OrWhere('small','>',0)->get();
         //   $products= Product::with('cart')->where('buyer_id',Auth::user()->id)->first()->pivot->amount;
        
 

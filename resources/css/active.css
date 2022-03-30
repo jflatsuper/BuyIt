@@ -1,10 +1,20 @@
- .nav-link.active{
-    color: white;
+.navbar-light .navbar-nav .nav-link.active {
+ 
+    color: black;
   
-    border-bottom:2px solid black;
-    transform: translateX(0.5rem);
+   background-color: rgba(0,0,0,0.5);
+    /* transform: translateX(0.5rem); */
     transition: all 0.4s;
   }
+  .nav-link:hover{
+    background-color: rgba(0,0,0,0.1);
+    
+    transition: all 0.4s;
+
+  }
+  .navbar-light .navbar-nav .nav-link {
+    color: white;
+}
   .active2{
     color: red;
     background-color: black;

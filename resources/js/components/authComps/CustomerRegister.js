@@ -1,13 +1,14 @@
 import React from 'react'
 import Register from './Register'
-function CustomerRegister({handleRegister,callback}){
+function CustomerRegister({handleRegister,callback,error}){
     return (
         <>
-        <p>this is the customer Register page</p>
+        
         <Register
             handleRegister={handleRegister}
             callback={callback}
             role={1}
+            error={error}
         />
         </>
     )

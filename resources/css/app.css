@@ -212,5 +212,9 @@
     box-shadow: none;
     border: 1px solid yellowgreen;
 }
+ select.selectsize:focus{
+  outline: none;
+  box-shadow: none !important;
+}
 /* Hide the default checkbox */
 

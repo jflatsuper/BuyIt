@@ -6,7 +6,7 @@ import { LinkContainer } from 'react-router-bootstrap'
 export default function Orders({orders}){
    
   
-    return (!orders?<Container style={{height:"80vh",top:'2%'}}  className='d-flex align-items-center text-center justify-content-center '>
+    return (orders.length<1?<Container style={{height:"80vh",top:'2%'}}  className='d-flex align-items-center text-center justify-content-center '>
                         <Row style={{height:"40vh",backgroundColor:'whitesmoke'}} className='d-flex align-items-center text-center justify-content-center '>
                             <Row><h1 className="">No Current Orders</h1></Row><hr/>
                             <Row><Link to='/dashboard/products'>Start Shopping</Link></Row>

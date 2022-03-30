@@ -11,12 +11,12 @@ use Auth;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable=['name','type','is_available','large','medium','small','seller_id','rating','no_of_rating','gender','color','productimage','price','productpublicid','description'];
+    protected $fillable=['name','type','large','medium','small','seller_id','rating','no_of_rating','gender','color','productimage','price','productpublicid','description'];
     public function cart(){
-        return $this->belongsToMany(Cart::class)->withPivot('amount', 'price');
+        return $this->belongsToMany(Cart::class)->withPivot('amount', 'price','size');
     }
     public function sold(){
-        return $this->belongstoMany(Sold::class)->withPivot('amount','price');
+        return $this->belongstoMany(Sold::class)->withPivot('amount','price','size');
     }
     
 }

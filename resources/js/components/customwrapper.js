@@ -10,7 +10,7 @@ const CustomWrapper = ({ isLoggedIn,role,view }) => {
       
      :
      <Navigate
-        to={'/login'}
+        to={'/auth/login'}
         replace
         state={{ location }}
       />
